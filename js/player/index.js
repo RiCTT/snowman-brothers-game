@@ -1,5 +1,6 @@
 import Sprite from '../base/sprite'
 import PLAYER_IMG_SRC from '../../images/snowsman.png'
+import { state } from '../store/index'
 
 const PLAYER_WIDTH = 60
 const PLAYER_HEIGHT = 80
@@ -13,18 +14,17 @@ export default class Player extends Sprite {
       window.innerWidth / 2,
       window.innerHeight - PLAYER_HEIGHT - 20
     )
-
-    this.drawToCanvas()
+    state.player.x = window.innerWidth / 2
+    state.player.y = window.innerHeight - PLAYER_HEIGHT - 20
   }
 
   move() {
     
   }
 
-  update() {
-    console.log('update')
-    console.log(this.x)
-    console.log(this.y)
+  draw() {
+    this.x = state.player.x
+    this.y = state.player.y
     this.drawToCanvas()
   }
 

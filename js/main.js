@@ -1,4 +1,4 @@
-import Rocker from './rocker/index'
+import { RockerBg, RockerRound } from './rocker/index'
 import Player from './player/index'
 
 export default class Main {
@@ -15,6 +15,7 @@ export default class Main {
     window.canvas = canvas
 
     this.aniId = 0
+    this.sprites = []
     this.ctx = ctx
     this.init()
     this.loop()
@@ -22,7 +23,8 @@ export default class Main {
 
   init() {
     this.player = new Player()
-    this.rocker = new Rocker(this.player)
+    this.rockerBg = new RockerBg()
+    this.rockerRound = new RockerRound()
   }
 
   loop() {
@@ -33,9 +35,12 @@ export default class Main {
       ctx.fillStyle = '#000'
       ctx.rect(0, 0, window.innerWidth, window.innerHeight)
       ctx.fill()
-      this.player.update()
-      this.rocker.drawToCanvas()
-      // this.loop()
+
+      this.rockerBg.draw()
+      this.rockerRound.draw()
+      this.player.draw()
+      
+      this.loop()
     })
   }
 }

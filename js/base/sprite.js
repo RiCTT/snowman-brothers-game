@@ -3,13 +3,7 @@
  */
 export default class Sprite {
   constructor(imgSrc = '', width = 0, height = 0, x = 0, y = 0) {
-    this.loaded = false
     this.img = new Image()
-    this.img.onload = () => {
-      this.loaded = true
-      this.cbs.forEach(e => e())
-    }
-    this.cbs = []
     this.img.src = imgSrc
 
     this.width = width
@@ -25,26 +19,13 @@ export default class Sprite {
    * 将精灵图绘制在canvas上
    */
   drawToCanvas() {
-    if (!this.loaded) {
-      this.cbs.push(() => {
-        if (!this.visible) return
-        ctx.drawImage(
-          this.img,
-          this.x,
-          this.y,
-          this.width,
-          this.height
-        )
-      })
-    } else {
-      ctx.drawImage(
-        this.img,
-        this.x,
-        this.y,
-        this.width,
-        this.height
-      )
-    }
+    ctx.drawImage(
+      this.img,
+      this.x,
+      this.y,
+      this.width,
+      this.height
+    )
   }
 
   /**
