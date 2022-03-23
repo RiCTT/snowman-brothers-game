@@ -6,6 +6,8 @@ import { Vector2 } from '../base/math'
 
 const ROCKER_BG_WIDTH = 120
 const ROCKER_BG_HEIGHT = 120
+const ROCKER_LEFT = 20
+const ROCKER_TOP = window.innerHeight - ROCKER_BG_HEIGHT - 20
 
 const size = 60
 
@@ -15,8 +17,8 @@ class RockerBg extends Sprite {
       ROCKER_BG_IMG_SRC,
       ROCKER_BG_WIDTH,
       ROCKER_BG_HEIGHT,
-      20,
-      window.innerHeight - ROCKER_BG_HEIGHT - 20
+      ROCKER_LEFT,
+      ROCKER_TOP
     )
     
     this.touched = false
@@ -27,44 +29,6 @@ class RockerBg extends Sprite {
   draw() {
     this.drawToCanvas()
   }
-
-  checkInWhere(touch) {
-    const { clientX } = touch
-    const { x, y, width, height } = this
-    const centerX = width / 2 + x
-    const centerY = height / 2 + y
-    this.centerX = centerX
-    this.centerY = centerY
-
-    if (clientX > centerX) {
-      return 'right'
-    }
-    if (clientX <= centerX) {
-      return 'left'
-    }
-  }
-
-  move() {
-    clearTimeout(this.timer)
-    this.timer = null
-    this.timer = setTimeout(() => {
-      console.log('timer')
-      const { direction } = this
-      switch(direction) {
-        case 'left':
-          this.moveX--
-          state.player.x--
-          break
-        case 'right':
-          this.moveX++
-          state.player.x++
-          break
-      }
-      console.log(state.player.x)
-      this.move()
-    }, 16)
-  }
-
 }
 
 
@@ -83,27 +47,65 @@ class RockerRound extends Sprite {
 
     this.touched = false
     this.initEvent()
-    this.aniId = -1
   }
 
   draw() {
     this.drawToCanvas()
+    this.moveTimer()
   }
 
   moveTimer() {
-    this.aniId = window.requestAnimationFrame(() => {
-      
-    })
+    if (!this.touched || !this.moveV) return
+
+    const newPosition = new Vector2(this.moveV.x, this.moveV.y)
+    let roundX = roundPosition.x
+    let roundY = roundPosition.y
+
+    if (newPosition.length() > size) {
+      const no = newPosition.normalize()
+      roundX += no.x * size
+      roundY += no.y * size
+    } else {
+      roundX += newPosition.x
+      roundY += newPosition.y
+    }
+
+    this.x = roundX
+    this.y = roundY
+    
+    let newX = state.player.x + newPosition.normalize().x
+    let newY = state.player.y + newPosition.normalize().y
+    if (newX <= 0) {
+      newX = 0
+    }
+    if (newX >= window.innerWidth - state.player.width) {
+      newX = window.innerWidth - state.player.width
+    }
+
+    if (newY <= 0) {
+      newY = 0
+    }
+
+    if (newY >= window.innerHeight - state.player.height) {
+      newY = window.innerHeight - state.player.height
+    }
+
+    state.player.x = newX
+    state.player.y = newY
   }
 
   initEvent() {
-    let start = { x: 0, y: 0 }
-    let move = { x: 0, y: 0 }
     canvas.addEventListener('touchstart', (e) => {
       const touch = e.touches[0]
-      start.x = touch.clientX
-      start.y = touch.clientY
-      this.touched = true
+      const { clientX, clientY } = touch
+      const isHorizontal = clientX > ROCKER_LEFT && clientX < ROCKER_LEFT + ROCKER_BG_WIDTH
+      const isVeritical = clientY > ROCKER_TOP && clientY < ROCKER_TOP + ROCKER_BG_HEIGHT
+      if (isHorizontal && isVeritical) {
+        this.startV = new Vector2(touch.clientX, touch.clientY)
+        this.touched = true
+      }
+      e.stopPropagation()
+      e.preventDefault()
     })
 
     canvas.addEventListener('touchmove', (e) => {
@@ -111,27 +113,25 @@ class RockerRound extends Sprite {
         return
       }
       const touch = e.touches[0]
-      move.x = touch.clientX - start.x
-      move.y = touch.clientY - start.y
-      const newPosition = new Vector2(move.x, move.y)
-      let roundX = roundPosition.x
-      let roundY = roundPosition.y
+      this.moveV = new Vector2(touch.clientX - this.startV.x, touch.clientY - this.startV.y)
+      // const newPosition = new Vector2(this.moveV.x, this.moveV.y)
+      // let roundX = roundPosition.x
+      // let roundY = roundPosition.y
 
-      if (newPosition.length() > size) {
-        const no = newPosition.normalize()
-        roundX += no.x * size
-        roundY += no.y * size
-      } else {
-        roundX += newPosition.x
-        roundY += newPosition.y
-      }
+      // if (newPosition.length() > size) {
+      //   const no = newPosition.normalize()
+      //   roundX += no.x * size
+      //   roundY += no.y * size
+      // } else {
+      //   roundX += newPosition.x
+      //   roundY += newPosition.y
+      // }
 
-      this.x = roundX
-      this.y = roundY
+      // this.x = roundX
+      // this.y = roundY
 
-      state.player.x = state.player.x + newPosition.normalize().x
-      state.player.y = state.player.y + newPosition.normalize().y
-      // state.player.y += roundY
+      // state.player.x = state.player.x + newPosition.normalize().x
+      // state.player.y = state.player.y + newPosition.normalize().y
 
       e.stopPropagation()
       e.preventDefault()
@@ -139,10 +139,12 @@ class RockerRound extends Sprite {
 
     canvas.addEventListener('touchend', (e) => {
       this.touched = false
-      this.moveX = 0
+      this.moveV = null
 
       this.x = roundPosition.x
       this.y = roundPosition.y
+      e.stopPropagation()
+      e.preventDefault()
     })
   }
 }

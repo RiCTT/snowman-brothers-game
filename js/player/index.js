@@ -1,9 +1,10 @@
 import Sprite from '../base/sprite'
-import PLAYER_IMG_SRC from '../../images/snowsman.png'
+import PLAYER_IMG_SRC from '../../images/snowsman-v2.png'
+// import PLAYER_IMG_SRC from '../../images/snowsman.png'
 import { state } from '../store/index'
 
-const PLAYER_WIDTH = 60
-const PLAYER_HEIGHT = 80
+const PLAYER_WIDTH = 80
+const PLAYER_HEIGHT = 100
 
 export default class Player extends Sprite {
   constructor() {
@@ -16,6 +17,8 @@ export default class Player extends Sprite {
     )
     state.player.x = window.innerWidth / 2
     state.player.y = window.innerHeight - PLAYER_HEIGHT - 20
+    state.player.width = PLAYER_WIDTH
+    state.player.height = PLAYER_HEIGHT
   }
 
   move() {
