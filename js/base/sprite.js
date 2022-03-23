@@ -1,6 +1,26 @@
 /**
  * 游戏基础的精灵类
  */
+
+export const sprites = []
+
+
+canvas.addEventListener('touchstart', (e) => {
+  const { clientX, clientY } = e.touches[0]
+  for(let i = 0; i < sprites.length; i++) {
+    const sp = sprites[i]
+    if (sp.isInBlockArea(clientX, clientY)) {
+      const handlers = sp.handlers
+      for (let j = 0; j < handlers.length; j++) {
+        const item = handlers[j]
+        if (item.name === 'click') {
+          item.handler()
+        }
+      }
+    }
+  }
+})
+
 export default class Sprite {
   constructor(imgSrc = '', width = 0, height = 0, x = 0, y = 0) {
     this.img = new Image()
@@ -13,6 +33,20 @@ export default class Sprite {
     this.y = y
 
     this.visible = true
+    this.handlers = []
+
+    sprites.push(this)
+  }
+
+  on(name, handler) {
+    this.handlers.push({
+      name,
+      handler 
+    })
+  }
+
+  draw() {
+    this.drawToCanvas()
   }
 
   /**
@@ -43,5 +77,15 @@ export default class Sprite {
               && spX <= this.x + this.width
               && spY >= this.y
               && spY <= this.y + this.height)
+  }
+
+  /**
+   * 是否在当前精灵的点击范围中
+   */
+  isInBlockArea(x, y) {
+    return x > this.x 
+      && x < (this.x + this.width)
+      && y > this.y
+      && y < (this.y + this.height)
   }
 }

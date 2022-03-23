@@ -1,5 +1,7 @@
 import { RockerBg, RockerRound } from './rocker/index'
 import Player from './player/index'
+import AttackBtn from './player/attack'
+import LeapBtn from '/js/player/leap'
 
 export default class Main {
   constructor() {
@@ -25,6 +27,8 @@ export default class Main {
     this.player = new Player()
     this.rockerBg = new RockerBg()
     this.rockerRound = new RockerRound()
+    this.attackBtn = new AttackBtn()
+    this.leapBtn = new LeapBtn()
   }
 
   loop() {
@@ -39,6 +43,8 @@ export default class Main {
       this.rockerBg.draw()
       this.rockerRound.draw()
       this.player.draw()
+      this.attackBtn.draw()
+      this.leapBtn.draw()
       
       this.loop()
     })

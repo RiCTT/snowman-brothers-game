@@ -10,6 +10,7 @@ const ROCKER_LEFT = 20
 const ROCKER_TOP = window.innerHeight - ROCKER_BG_HEIGHT - 20
 
 const size = 60
+const speed = 2.5
 
 class RockerBg extends Sprite {
   constructor(player) {
@@ -73,8 +74,8 @@ class RockerRound extends Sprite {
     this.x = roundX
     this.y = roundY
     
-    let newX = state.player.x + newPosition.normalize().x
-    let newY = state.player.y + newPosition.normalize().y
+    let newX = state.player.x + newPosition.normalize().x * speed
+    let newY = state.player.y + newPosition.normalize().y * speed
     if (newX <= 0) {
       newX = 0
     }
@@ -114,25 +115,7 @@ class RockerRound extends Sprite {
       }
       const touch = e.touches[0]
       this.moveV = new Vector2(touch.clientX - this.startV.x, touch.clientY - this.startV.y)
-      // const newPosition = new Vector2(this.moveV.x, this.moveV.y)
-      // let roundX = roundPosition.x
-      // let roundY = roundPosition.y
-
-      // if (newPosition.length() > size) {
-      //   const no = newPosition.normalize()
-      //   roundX += no.x * size
-      //   roundY += no.y * size
-      // } else {
-      //   roundX += newPosition.x
-      //   roundY += newPosition.y
-      // }
-
-      // this.x = roundX
-      // this.y = roundY
-
-      // state.player.x = state.player.x + newPosition.normalize().x
-      // state.player.y = state.player.y + newPosition.normalize().y
-
+      
       e.stopPropagation()
       e.preventDefault()
     })
