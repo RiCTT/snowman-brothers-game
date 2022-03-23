@@ -32,12 +32,17 @@ class Attack extends Sprite {
     if (this.expand) {
       this.width += 2
       this.height += 2
+      this.x -= 1
+      this.y -= 1
+      
       if (this.width >= MAX_WIDTH) {
         this.width = WIDTH
+        this.x = window.innerWidth - WIDTH - 80
         this.expand = false
       }
       if (this.height >= MAX_HEIGHT) {
         this.height = HEIGHT
+        this.y = window.innerHeight - HEIGHT - 10
         this.expand = false
       }
     }

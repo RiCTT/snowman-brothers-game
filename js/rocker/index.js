@@ -8,6 +8,8 @@ const ROCKER_BG_WIDTH = 120
 const ROCKER_BG_HEIGHT = 120
 const ROCKER_LEFT = 20
 const ROCKER_TOP = window.innerHeight - ROCKER_BG_HEIGHT - 20
+const PLAY_MAX_LEFT = 140
+const PLAY_MAX_RIGHT = 410
 
 const size = 60
 const speed = 2.5
@@ -76,11 +78,11 @@ class RockerRound extends Sprite {
     
     let newX = state.player.x + newPosition.normalize().x * speed
     let newY = state.player.y + newPosition.normalize().y * speed
-    if (newX <= 0) {
-      newX = 0
+    if (newX <= PLAY_MAX_LEFT) {
+      newX = PLAY_MAX_LEFT
     }
-    if (newX >= window.innerWidth - state.player.width) {
-      newX = window.innerWidth - state.player.width
+    if (newX >= PLAY_MAX_RIGHT) {
+      newX = PLAY_MAX_RIGHT
     }
 
     if (newY <= 0) {
@@ -115,7 +117,7 @@ class RockerRound extends Sprite {
       }
       const touch = e.touches[0]
       this.moveV = new Vector2(touch.clientX - this.startV.x, touch.clientY - this.startV.y)
-      
+
       e.stopPropagation()
       e.preventDefault()
     })
