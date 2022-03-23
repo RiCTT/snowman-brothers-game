@@ -7,7 +7,7 @@ const MAX_WIDTH = 100
 const MAX_HEIGHT = 100
 
 class Leap extends Sprite {
-  constructor() {
+  constructor(player) {
     super(
       LEAP_IMG_SRC,
       WIDTH,
@@ -15,11 +15,13 @@ class Leap extends Sprite {
       window.innerWidth - WIDTH,
       window.innerHeight - HEIGHT - 60
     )
+    this.player = player
     this.on('click', this.onClick.bind(this))
   }
 
   onClick() {
     this.expand = true
+    this.player && this.player.onLeap && this.player.onLeap()
   }
 
   draw() {

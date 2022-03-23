@@ -27,8 +27,8 @@ export default class Main {
     this.player = new Player()
     this.rockerBg = new RockerBg()
     this.rockerRound = new RockerRound()
-    this.attackBtn = new AttackBtn()
-    this.leapBtn = new LeapBtn()
+    this.attackBtn = new AttackBtn(this.player)
+    this.leapBtn = new LeapBtn(this.player)
   }
 
   loop() {

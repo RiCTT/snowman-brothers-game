@@ -22,6 +22,7 @@ class Attack extends Sprite {
 
   onClick() {
     this.expand = true
+    this.player && this.player.onAttack && this.player.onAttack()
   }
 
   initEvent() {

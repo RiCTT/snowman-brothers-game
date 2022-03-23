@@ -31,6 +31,14 @@ export default class Player extends Sprite {
     this.drawToCanvas()
   }
 
+  onAttack() {
+    console.log('attack')
+  }
+
+  onLeap() {
+    console.log('leap')
+  }
+
   initEvent() {
 
   }
