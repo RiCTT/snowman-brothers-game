@@ -20,5 +20,6 @@
   "homepage": "https://github.com/RiCTT/snowman-brothers-game#readme",
   "dependencies": {
     "images": "^3.2.4"
-  }
+  },
+  "devDependencies": {}
 }

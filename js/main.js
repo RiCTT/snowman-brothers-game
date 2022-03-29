@@ -2,6 +2,7 @@ import { RockerBg, RockerRound } from './rocker/index'
 import Player from './player/index'
 import AttackBtn from './player/attack'
 import LeapBtn from '/js/player/leap'
+import Ball from '/js/ball/index'
 
 export default class Main {
   constructor() {
@@ -29,6 +30,13 @@ export default class Main {
     this.rockerRound = new RockerRound()
     this.attackBtn = new AttackBtn(this.player)
     this.leapBtn = new LeapBtn(this.player)
+    
+    // this.balls = []
+    // let lens = 3
+    // for (let i = 0; i < lens; i++) {
+    //   let ball = new Ball()
+    //   this.balls.push(ball)
+    // }
   }
 
   loop() {
@@ -40,6 +48,9 @@ export default class Main {
       ctx.rect(0, 0, window.innerWidth, window.innerHeight)
       ctx.fill()
 
+      // this.balls.forEach(ball => {
+      //   ball.draw()
+      // })
       this.rockerBg.draw()
       this.rockerRound.draw()
       this.player.draw()

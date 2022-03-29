@@ -5,7 +5,19 @@
 export const sprites = []
 
 
+canvas.addEventListener('click', (e) => {
+  console.log('click !!111')
+  e.stopPropagation()
+  e.preventDefault()
+})
+document.body.addEventListener('click', (e) => {
+  console.log('click !!')
+  e.stopPropagation()
+  e.preventDefault()
+})
+
 canvas.addEventListener('touchstart', (e) => {
+  console.log(e.touches)
   const { clientX, clientY } = e.touches[0]
   for(let i = 0; i < sprites.length; i++) {
     const sp = sprites[i]
@@ -19,6 +31,8 @@ canvas.addEventListener('touchstart', (e) => {
       }
     }
   }
+  e.stopPropagation()
+  e.preventDefault()
 })
 
 export default class Sprite {

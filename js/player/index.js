@@ -3,8 +3,8 @@ import PLAYER_IMG_SRC from '../../images/snowsman-v2.png'
 // import PLAYER_IMG_SRC from '../../images/snowsman.png'
 import { state } from '../store/index'
 
-const PLAYER_WIDTH = 80
-const PLAYER_HEIGHT = 100
+const PLAYER_WIDTH = 30
+const PLAYER_HEIGHT = 40
 
 export default class Player extends Sprite {
   constructor() {
@@ -19,6 +19,7 @@ export default class Player extends Sprite {
     state.player.y = window.innerHeight - PLAYER_HEIGHT - 20
     state.player.width = PLAYER_WIDTH
     state.player.height = PLAYER_HEIGHT
+    console.log(this.y)
   }
 
   move() {
@@ -36,7 +37,11 @@ export default class Player extends Sprite {
   }
 
   onLeap() {
+    // this.y += 10
+    this.y = this.y + 10
     console.log('leap')
+    console.log(this.y)
+    this.y = state.player.y -= 24
   }
 
   initEvent() {

@@ -9,7 +9,7 @@ const ROCKER_BG_HEIGHT = 120
 const ROCKER_LEFT = 20
 const ROCKER_TOP = window.innerHeight - ROCKER_BG_HEIGHT - 20
 const PLAY_MAX_LEFT = 140
-const PLAY_MAX_RIGHT = 410
+const PLAY_MAX_RIGHT = 450
 
 const size = 60
 const speed = 2.5
@@ -107,7 +107,7 @@ class RockerRound extends Sprite {
         this.startV = new Vector2(touch.clientX, touch.clientY)
         this.touched = true
       }
-      e.stopPropagation()
+      // e.stopPropagation()
       e.preventDefault()
     })
 
@@ -118,17 +118,18 @@ class RockerRound extends Sprite {
       const touch = e.touches[0]
       this.moveV = new Vector2(touch.clientX - this.startV.x, touch.clientY - this.startV.y)
 
-      e.stopPropagation()
+      // e.stopPropagation()
       e.preventDefault()
     })
 
     canvas.addEventListener('touchend', (e) => {
+      console.log('force touchend')
       this.touched = false
       this.moveV = null
 
       this.x = roundPosition.x
       this.y = roundPosition.y
-      e.stopPropagation()
+      // e.stopPropagation()
       e.preventDefault()
     })
   }
