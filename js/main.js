@@ -1,8 +1,8 @@
-import { RockerBg, RockerRound } from './rocker/index'
-import Player from './player/index'
-import AttackBtn from './player/attack'
-import LeapBtn from '/js/player/leap'
-import Ball from '/js/ball/index'
+// import { RockerBg, RockerRound } from './rocker/index'
+// import Player from './player/index'
+// import AttackBtn from './player/attack'
+// import LeapBtn from '/js/player/leap'
+// import Ball from '/js/ball/index'
 
 export default class Main {
   constructor() {
@@ -13,15 +13,15 @@ export default class Main {
     ctx.fillStyle = '#000'
     ctx.rect(0, 0, window.innerWidth, window.innerHeight)
     ctx.fill()
-    
+    console.log('here')
+
     window.ctx = ctx
     window.canvas = canvas
 
     this.aniId = 0
     this.sprites = []
     this.ctx = ctx
-    this.init()
-    this.loop()
+    // this.init()
   }
 
   init() {
@@ -30,6 +30,7 @@ export default class Main {
     this.rockerRound = new RockerRound()
     this.attackBtn = new AttackBtn(this.player)
     this.leapBtn = new LeapBtn(this.player)
+    this.loop()
     
     // this.balls = []
     // let lens = 3
