@@ -9,7 +9,11 @@ export enum EInputEventType {
   KEYBOARDEVENT,
   KEYUP,
   KEYDOWN,
-  KEYPRESS
+  KEYPRESS,
+  CLICK,
+  TOUCHSTART,
+  TOUCHMOVE,
+  TOUCHEND
 }
 
 export class CanvasInputEvent {
@@ -88,6 +92,11 @@ export class Application implements EventListenerObject {
     this.canvas.addEventListener('mouseup', this, false)
     this.canvas.addEventListener('mousemove', this, false)
 
+    this.canvas.addEventListener('click', this, false)
+    this.canvas.addEventListener('touchstart', this, false)
+    this.canvas.addEventListener('touchmove', this, false)
+    this.canvas.addEventListener('touchend', this, false)
+
     window.addEventListener('keydown', this, false)
     window.addEventListener('keyup', this, false)
     window.addEventListener('keypress', this, false)
@@ -159,8 +168,20 @@ export class Application implements EventListenerObject {
 
   }
 
-  public handleEvent(evt: Event): void {
+  public handleEvent(evt: Event | TouchEvent): void {
     switch (evt.type) {
+      case "click":
+        this.dispatchClick(this._toCanvasMouseEvent(evt, EInputEventType.CLICK))
+        break
+      case "touchstart":
+        this.dispatchTouchStart(evt as TouchEvent)
+        break
+      case "touchmove":
+        this.dispatchTouchStart(evt as TouchEvent)
+        break
+      case "touchend":
+        this.dispatchTouchEnd(evt as TouchEvent)
+        break
       case "mousedown":
         this._isMouseDown = true
         this.dispatchMouseDown(this._toCanvasMouseEvent(evt, EInputEventType.MOUSEDOWN))
@@ -187,6 +208,22 @@ export class Application implements EventListenerObject {
         this.dispatchKeyUp(this._toCanvasKeyBoardEvent(evt, EInputEventType.KEYUP));
         break;
     }
+  }
+
+  protected dispatchClick(evt: Event | CanvasMouseEvent): void {
+    return
+  }
+
+  protected dispatchTouchStart(evt: TouchEvent): void {
+    return
+  }
+
+  protected dispatchTouchMove(evt: TouchEvent): void {
+    return
+  }
+
+  protected dispatchTouchEnd(evt: TouchEvent): void {
+    return
   }
 
   protected dispatchMouseDown(evt: CanvasMouseEvent): void {

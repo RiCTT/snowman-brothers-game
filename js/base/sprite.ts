@@ -8,6 +8,10 @@ export interface ISprite {
   visible: boolean;
   
   draw: (ctx: CanvasRenderingContext2D) => void;
+  onClick?: (Event) => void;
+  onTouchStart?: (TouchEvent) => void;
+  onTouchMove?: (TouchEvent) => void;
+  onTouchEnd?: (TouchEvent) => void;
 }
 
 export default class Sprite implements ISprite {
