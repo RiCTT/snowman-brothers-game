@@ -22,10 +22,14 @@ export class GameApplication extends Canvas2DApplication {
       let sp: ISprite = this.sprites[i]
       sp.draw(this.ctx)
     }
-
   }
 
-  public update(): void {}
+  public update(elapsedMsec: number, intervalSec: number): void {
+    for (let i: number = 0; i < this.sprites.length; i++) {
+      let sp: ISprite = this.sprites[i]
+      sp.update && sp.update(elapsedMsec, intervalSec)
+    }
+  }
 
   public addSprite(sp: ISprite): void {
     this.sprites.push(sp)
@@ -46,8 +50,11 @@ export class GameApplication extends Canvas2DApplication {
 
   protected dispatchTouchStart(evt: TouchEvent): void {
     this.sprites.forEach(sp => {
-      if (sp.onTouchStart) {
-        sp.onTouchStart(evt)
+      if (sp.isSupportTouch && sp.onTouchStart) {
+        const touch = evt.touches[0]
+        if (sp.isInSpriteArea(touch.clientX, touch.clientY)) {
+          sp.onTouchStart(evt)
+        }
       }
     })
   }
@@ -66,5 +73,23 @@ export class GameApplication extends Canvas2DApplication {
         sp.onTouchEnd(evt)
       }
     })
+  }
+
+  public drawCircle(x: number, y: number, radius: number, style: string = '#000', isFill: boolean = true): void {
+    this.ctx.save()
+    this.ctx.translate(x, y)
+    if (isFill) {
+      this.ctx.fillStyle = style
+    } else {
+      this.ctx.strokeStyle = style
+    }
+    this.ctx.beginPath();
+    this.ctx.arc(0, 0, radius, 0, Math.PI * 2)
+    if (isFill) {
+      this.ctx.fill()
+    } else {
+      this.ctx.stroke()
+    }
+    this.ctx.restore()
   }
 }

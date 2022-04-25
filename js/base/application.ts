@@ -161,7 +161,6 @@ export class Application implements EventListenerObject {
   }
 
   public update(elapsedMsec: number, intervalSec: number): void {
-
   }
 
   public render(): void {
@@ -177,7 +176,7 @@ export class Application implements EventListenerObject {
         this.dispatchTouchStart(evt as TouchEvent)
         break
       case "touchmove":
-        this.dispatchTouchStart(evt as TouchEvent)
+        this.dispatchTouchMove(evt as TouchEvent)
         break
       case "touchend":
         this.dispatchTouchEnd(evt as TouchEvent)

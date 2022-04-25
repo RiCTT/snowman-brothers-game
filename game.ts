@@ -1,19 +1,13 @@
 import { GameApplication } from './js/app'
-import Sprite from './js/base/sprite'
-import ATTACK_IMG_SRC from './images/btn-attack.png'
-import { CanvasInputEvent } from './js/base/application'
+import Attack from './js/sprites/attack'
+import Rocker from './js/sprites/rocker'
 
 const canvas: HTMLCanvasElement = document.querySelector('#canvas') as HTMLCanvasElement
 const app: GameApplication = new GameApplication(canvas)
 
+const attackSp = new Attack(app)
+const rockerSp = new Rocker(app)
+
 app.start()
-
-
-let attackBtnSp = new Sprite(ATTACK_IMG_SRC, 100, 40, 0, 0)
-
-
-attackBtnSp.onClick = (evt: CanvasInputEvent): void => {
-  console.log('click')
-}
-
-app.addSprite(attackBtnSp)
+app.addSprite(attackSp)
+app.addSprite(rockerSp)

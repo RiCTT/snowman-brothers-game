@@ -8,13 +8,19 @@ export interface ISprite {
   height: number;
   src: string;
   visible: boolean;
-  
+  scaleX?: number;
+  scaleY?: number;
+  isSupportTouch: boolean;
+
+
   draw: (ctx: CanvasRenderingContext2D) => void;
+  isInSpriteArea: (x: number, y: number) => boolean;
+  isCollideWith: (sp: Sprite) => boolean;
   onClick?: (evt: CanvasMouseEvent) => void;
   onTouchStart?: (evt: TouchEvent) => void;
   onTouchMove?: (evt: TouchEvent) => void;
   onTouchEnd?: (evt: TouchEvent) => void;
-  isInSpriteArea: (x: number, y: number) => boolean;
+  update?(elapsedMsec: number, intervalSec: number): void;
 }
 
 export default class Sprite implements ISprite {
@@ -24,26 +30,28 @@ export default class Sprite implements ISprite {
   public height: number = 0;
   public src: string = '';
   public visible: boolean = false;
+  public scaleX?: number = 1;
+  public scaleY?: number = 1;
+  public isSupportTouch: boolean = false;
   private img: HTMLImageElement;
 
-  onClick?: (evt: CanvasMouseEvent) => void;
-  onTouchStart?: (evt: TouchEvent) => void;
-  onTouchMove?: (evt: TouchEvent) => void;
-  onTouchEnd?: (evt: TouchEvent) => void;
-  
-  constructor(imgSrc = '', width = 0, height = 0, x = 0, y = 0) {
-    this.img = new Image()
-    this.img.src = imgSrc
 
-    this.width = width
-    this.height = height
+  onClick(evt: CanvasMouseEvent): void { }
+  onTouchStart(evt: TouchEvent): void { }
+  onTouchMove(evt: TouchEvent): void { }
+  onTouchEnd(evt: TouchEvent): void { }
 
-    this.x = x
-    this.y = y
+  update(elapsedMsec: number, intervalSec: number): void { }
 
+  constructor(src?) {
+    if (src) {
+      this.img = new Image()
+      this.src = src
+      this.img.src = src
+    }
   }
 
-  draw(ctx) {
+  draw(ctx: CanvasRenderingContext2D) {
     ctx.drawImage(
       this.img,
       this.x,
@@ -58,23 +66,23 @@ export default class Sprite implements ISprite {
    * 另一个精灵的中心点处于本精灵所在的矩形内即可
    * @param{Sprite} sp: Sptite的实例
    */
-  isCollideWith(sp) {
+  isCollideWith(sp: Sprite) {
     const spX = sp.x + sp.width / 2
     const spY = sp.y + sp.height / 2
 
     if (!this.visible || !sp.visible) return false
 
     return !!(spX >= this.x
-              && spX <= this.x + this.width
-              && spY >= this.y
-              && spY <= this.y + this.height)
+      && spX <= this.x + this.width
+      && spY >= this.y
+      && spY <= this.y + this.height)
   }
 
   /**
    * 是否在当前精灵的点击范围中
    */
-  isInSpriteArea(x, y) {
-    return x > this.x 
+  isInSpriteArea(x: number, y: number) {
+    return x > this.x
       && x < (this.x + this.width)
       && y > this.y
       && y < (this.y + this.height)

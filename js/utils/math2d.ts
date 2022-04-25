@@ -1,6 +1,11 @@
 const EPSILON: number = 0.00001;
 const PiBy180: number = 0.017453292519943295;
 
+export const getDistance = (x1: number, y1: number, x2: number, y2: number): number => {
+  let x = x2 - x1
+  let y = y2 - y1
+  return Math.sqrt(x * x + y * y)
+}
 export class vec2 {
   // 为什么是float32array
   public values: Float32Array;
