@@ -286,9 +286,9 @@ export class Application implements EventListenerObject {
       let pos: vec2 = vec2.create(x, y)
 
       if (evt.type === "mousedown") {
-        console.log(" borderLeftWidth : " + borderLeftWidth + " borderTopWidth : " + borderTopWidth);
-        console.log(" paddingLeft : " + paddingLeft + " paddingTop : " + paddingTop);
-        console.log(" 变换后的canvasPosition : " + pos.toString());
+        // console.log(" borderLeftWidth : " + borderLeftWidth + " borderTopWidth : " + borderTopWidth);
+        // console.log(" paddingLeft : " + paddingLeft + " paddingTop : " + paddingTop);
+        // console.log(" 变换后的canvasPosition : " + pos.toString());
       }
       return pos
     }

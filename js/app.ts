@@ -1,4 +1,4 @@
-import { Canvas2DApplication, CanvasInputEvent } from './base/application'
+import { Canvas2DApplication, CanvasInputEvent, CanvasMouseEvent } from './base/application'
 import { ISprite } from './base/sprite';
 
 export class GameApplication extends Canvas2DApplication {
@@ -10,7 +10,7 @@ export class GameApplication extends Canvas2DApplication {
 
   constructor(canvas: HTMLCanvasElement) {
     super(canvas)
-    this.ctx = this.context2D
+    this.ctx = this.context2D as CanvasRenderingContext2D
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
   }
@@ -25,14 +25,24 @@ export class GameApplication extends Canvas2DApplication {
 
   }
 
-  public update(): void {
-
-  }
+  public update(): void {}
 
   public addSprite(sp: ISprite): void {
     this.sprites.push(sp)
   }
 
+  // 只有落在精灵的范围内，才允许分发点击事件
+  protected dispatchClick(evt: CanvasMouseEvent): void {
+    this.sprites.forEach(sp => {
+      if (sp.onClick) {
+        const canvasPos = evt.canvasPosition
+        const { x, y } = canvasPos
+        if (sp.isInSpriteArea(x, y)) {
+          sp.onClick(evt)
+        }
+      }
+    })
+  }
 
   protected dispatchTouchStart(evt: TouchEvent): void {
     this.sprites.forEach(sp => {

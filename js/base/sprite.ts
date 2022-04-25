@@ -1,4 +1,6 @@
 
+import { CanvasMouseEvent } from './application'
+
 export interface ISprite {
   x: number;
   y: number;
@@ -8,10 +10,11 @@ export interface ISprite {
   visible: boolean;
   
   draw: (ctx: CanvasRenderingContext2D) => void;
-  onClick?: (Event) => void;
-  onTouchStart?: (TouchEvent) => void;
-  onTouchMove?: (TouchEvent) => void;
-  onTouchEnd?: (TouchEvent) => void;
+  onClick?: (evt: CanvasMouseEvent) => void;
+  onTouchStart?: (evt: TouchEvent) => void;
+  onTouchMove?: (evt: TouchEvent) => void;
+  onTouchEnd?: (evt: TouchEvent) => void;
+  isInSpriteArea: (x: number, y: number) => boolean;
 }
 
 export default class Sprite implements ISprite {
@@ -22,6 +25,11 @@ export default class Sprite implements ISprite {
   public src: string = '';
   public visible: boolean = false;
   private img: HTMLImageElement;
+
+  onClick?: (evt: CanvasMouseEvent) => void;
+  onTouchStart?: (evt: TouchEvent) => void;
+  onTouchMove?: (evt: TouchEvent) => void;
+  onTouchEnd?: (evt: TouchEvent) => void;
   
   constructor(imgSrc = '', width = 0, height = 0, x = 0, y = 0) {
     this.img = new Image()
@@ -65,7 +73,7 @@ export default class Sprite implements ISprite {
   /**
    * 是否在当前精灵的点击范围中
    */
-  isInBlockArea(x, y) {
+  isInSpriteArea(x, y) {
     return x > this.x 
       && x < (this.x + this.width)
       && y > this.y
