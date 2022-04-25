@@ -18,6 +18,8 @@ export default class Rocker extends Sprite {
   public innderRadius: number = 26;
   private _touched: boolean = false;
   private _touch: Touch;
+  private _player: Sprite;
+  public targetVec: vec2;
 
   constructor(app: GameApplication) {
     super()
@@ -32,11 +34,19 @@ export default class Rocker extends Sprite {
     this.innerX = x
     this.innerY = y
     this.isSupportTouch = true
-
     this.app = app
   }
 
-  update(elapsedMesc: number, intervalSec: number) { }
+  setPlayer(player: Sprite): void {
+    this._player = player
+  }
+
+  update(elapsedMesc: number, intervalSec: number) {
+    if (this._touched && this._player && this.targetVec) {
+      this._player.x += this.targetVec.x * 2 / this.targetVec.length
+      this._player.y += this.targetVec.y * 2 / this.targetVec.length
+    }
+  }
 
   draw(ctx: CanvasRenderingContext2D): void {
     this.app.drawCircle(this.x, this.y, this.radius, 'rgba(0, 0, 0, .5)')
@@ -63,6 +73,7 @@ export default class Rocker extends Sprite {
     const { clientX: sx, clientY: sy } = startTouch
     const { clientX, clientY } = touch
     const v1: vec2 = new vec2(clientX - this.x, clientY - this.y)
+    this.targetVec = v1
     const len = v1.normalize()
     if (len > this.radius) {
       this.innerX = this.x + v1.x * this.radius

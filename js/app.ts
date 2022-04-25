@@ -92,4 +92,32 @@ export class GameApplication extends Canvas2DApplication {
     }
     this.ctx.restore()
   }
+
+  public drawRect(x: number, y: number, width: number = 50, height: number = 50, style: string = '#000', isFill: boolean = true): void {
+    this.ctx.save()
+    this.ctx.beginPath()
+    if (isFill) {
+      this.ctx.fillStyle = style
+    } else {
+      this.ctx.strokeStyle = style
+    }
+    this.ctx.rect(x, y, width, height)
+    if (isFill) {
+      this.ctx.fill()
+    } else {
+      this.ctx.stroke()
+    }
+    this.ctx.closePath()
+    this.ctx.restore()
+  }
+
+  public drawLine(x1: number, y1: number, x2: number, y2: number): void {
+    this.ctx.save()
+    this.ctx.beginPath()
+    this.ctx.moveTo(x1, y1)
+    this.ctx.lineTo(x2, y2)
+    this.ctx.fill()
+    this.ctx.closePath()
+    this.ctx.restore()
+  }
 }
