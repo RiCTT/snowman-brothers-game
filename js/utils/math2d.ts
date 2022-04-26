@@ -6,6 +6,27 @@ export const getDistance = (x1: number, y1: number, x2: number, y2: number): num
   let y = y2 - y1
   return Math.sqrt(x * x + y * y)
 }
+
+/**
+ * 
+ * @param sx 起始点x
+ * @param sy 起始点y
+ * @param cx 控制点x
+ * @param cy 控制点y
+ * @param ex 终点x
+ * @param ey 终点y
+ * @param t 0-1的值
+ * @returns 
+ */
+export const getQuadraticCurvePoint = (sx, sy, cx, cy, ex, ey, t): { x: number, y: number } => {
+  const dx = ((1 - t) * (1 - t)) * sx + 2 * t * (1 - t) * cx + t * t * ex
+  const dy = ((1 - t) * (1 - t)) * sy + 2 * t * (1 - t) * cy + t * t * ey
+
+  return {
+    x: dx,
+    y: dy
+  }
+}
 export class vec2 {
   // 为什么是float32array
   public values: Float32Array;

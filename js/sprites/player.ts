@@ -28,7 +28,6 @@ export default class Player extends Sprite implements IPlayer {
 
   draw(ctx: CanvasRenderingContext2D): void {
     this.app.drawRect(this.x, this.y, this.width, this.height)
-    // this.app.drawRect(this.boundaryRect.origin.x, this.boundaryRect.origin.y, this.boundaryRect.size.width, this.boundaryRect.size.height, '#000', false)
     this.app.drawLine(this.boundaryRect.left, this.boundaryRect.top, this.boundaryRect.left, this.boundaryRect.bottom, 0.5, '#f00')
     this.app.drawLine(this.boundaryRect.right, this.boundaryRect.top, this.boundaryRect.right, this.boundaryRect.bottom, 0.5, '#f00')
   }

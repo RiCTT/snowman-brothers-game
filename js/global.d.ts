@@ -26,6 +26,7 @@ interface ISprite {
 interface IRocker extends ISprite {
   innerX: number;
   innerY: number;
+  targetVec: vec2;
 }
 
 interface IPlayer extends ISprite {

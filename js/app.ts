@@ -1,6 +1,4 @@
 import { Canvas2DApplication, CanvasInputEvent, CanvasMouseEvent } from './base/application'
-import Sprite from './base/sprite';
-import Rocker from './sprites/rocker';
 
 export class GameApplication extends Canvas2DApplication {
   public ctx: CanvasRenderingContext2D;
@@ -129,6 +127,17 @@ export class GameApplication extends Canvas2DApplication {
     this.ctx.lineWidth = lineWidth
     this.ctx.moveTo(x1, y1)
     this.ctx.lineTo(x2, y2)
+    this.ctx.closePath()
+    this.ctx.stroke()
+    this.ctx.restore()
+  }
+
+  public drawPoint(x: number = 0, y: number = 0, radius: number = 3): void {
+    this.ctx.save()
+    this.ctx.translate(x, y)
+    this.ctx.beginPath()
+    this.ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'
+    this.ctx.arc(0, 0, radius, 0, Math.PI * 2)
     this.ctx.closePath()
     this.ctx.stroke()
     this.ctx.restore()
