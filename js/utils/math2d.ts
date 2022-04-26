@@ -225,6 +225,21 @@ export class Rectangle {
     let size: Size = new Size(w, h);
     return new Rectangle(origin, size);
   }
+
+  public get left(): number {
+    return this.origin.x
+  }
+
+  public get right(): number {
+    return this.origin.x + this.size.width
+  }
+
+  public get top(): number {
+    return this.origin.y
+  }
+  public get bottom(): number {
+    return this.origin.y + this.size.height
+  }
 }
 
 export class Math2D {

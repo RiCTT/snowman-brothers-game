@@ -1,7 +1,7 @@
 import Sprite from "../base/sprite";
 import ROCKER_BG_IMG_SRC from '../../images/bg.png'
 import ROCKER_ROUND_IMG_SRC from '../../images/round.png'
-import { state } from '../store/index'
+import { state } from '../store'
 import { Vector2 } from '../base/math'
 
 const ROCKER_BG_WIDTH = 120

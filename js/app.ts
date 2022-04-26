@@ -111,13 +111,15 @@ export class GameApplication extends Canvas2DApplication {
     this.ctx.restore()
   }
 
-  public drawLine(x1: number, y1: number, x2: number, y2: number): void {
+  public drawLine(x1: number, y1: number, x2: number, y2: number, lineWidth: number = 1, style: string = '#000'): void {
     this.ctx.save()
     this.ctx.beginPath()
+    this.ctx.strokeStyle = style
+    this.ctx.lineWidth = lineWidth
     this.ctx.moveTo(x1, y1)
     this.ctx.lineTo(x2, y2)
-    this.ctx.fill()
     this.ctx.closePath()
+    this.ctx.stroke()
     this.ctx.restore()
   }
 }

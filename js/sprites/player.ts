@@ -1,40 +1,68 @@
-import Sprite from '../base/sprite'
+import Sprite, { ISprite } from '../base/sprite'
 // import { CanvasInputEvent } from './js/base/application'
-import { GameApplication } from '@/app'
-import { getDistance, vec2 } from '../utils/math2d';
+import { GameApplication } from '../app'
+import { Rectangle, vec2, Size } from '../utils/math2d';
 
-export default class Player extends Sprite {
+export interface IPlayer extends ISprite {
+  setVector(x: number, y: number): void
+  setSize(w: number, h: number): void
+}
+
+export default class Player extends Sprite implements IPlayer {
   private app: GameApplication;
-  public initWidth: number = 100;
-  public initHeight: number = 100;
-  public initX: number = 0;
-  public initY: number = 0;
-  public innerX: number = 0;
-  public innerY: number = 0;
-  public width: number = 100;
-  public height: number = 100;
+  public x: number = 140;
+  public y: number = 20;
+  public width: number = 50;
+  public height: number = 50;
   public toUpdate: boolean = false;
+  public rect: Rectangle;
+  public boundaryRect: Rectangle;
 
   constructor(app: GameApplication) {
     super()
-    this.width = this.initWidth;
-    this.height = this.initHeight;
-    let x = 0
-    let y = 0
-    this.initX = x
-    this.initY = y
-    this.x = x
-    this.y = y
-    this.innerX = x
-    this.innerY = y
-    this.isSupportTouch = true
-
+    this.rect = new Rectangle(new vec2(this.x, this.y), new Size(this.width, this.height))
+    this.boundaryRect = new Rectangle(
+      new vec2(this.x, 0), 
+      new Size(window.innerWidth - this.x - this.width - 80, window.innerHeight)
+    )
     this.app = app
   }
 
-  update(elapsedMesc: number, intervalSec: number) { }
+  update(elapsedMesc: number, intervalSec: number) {}
 
   draw(ctx: CanvasRenderingContext2D): void {
-    this.app.drawRect(this.x, this.y, 50, 50)
+    this.app.drawRect(this.x, this.y, this.width, this.height)
+    // this.app.drawRect(this.boundaryRect.origin.x, this.boundaryRect.origin.y, this.boundaryRect.size.width, this.boundaryRect.size.height, '#000', false)
+    this.app.drawLine(this.boundaryRect.left, this.boundaryRect.top, this.boundaryRect.left, this.boundaryRect.bottom, 0.5, '#f00')
+    this.app.drawLine(this.boundaryRect.right, this.boundaryRect.top, this.boundaryRect.right, this.boundaryRect.bottom, 0.5, '#f00')
+  }
+
+  setVector(x: number, y: number) {
+    const { left, right, top, bottom } = this.boundaryRect
+    
+    if (x < left) {
+      x = left
+    }
+    if (x > right - this.width) {
+      x = right - this.width
+    }
+    if (y < top) {
+      y = top
+    }
+    if (y > bottom - this.height) {
+      y = bottom - this.height
+    }
+
+    this.x = x
+    this.y = y
+    this.rect.origin.x = x
+    this.rect.origin.y = y
+  }
+
+  setSize(w: number, h: number) {
+    this.width = w
+    this.height = h
+    this.rect.size.width = w
+    this.rect.size.height = h
   }
 }

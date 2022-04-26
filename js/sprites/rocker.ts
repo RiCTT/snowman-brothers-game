@@ -1,7 +1,7 @@
 import Sprite from '../base/sprite'
-// import { CanvasInputEvent } from './js/base/application'
-import { GameApplication } from '@/app'
-import { getDistance, vec2 } from '../utils/math2d';
+import { GameApplication } from '../app'
+import { vec2 } from '../utils/math2d';
+import { IPlayer } from '../sprites/player'
 
 export default class Rocker extends Sprite {
   private app: GameApplication;
@@ -17,8 +17,7 @@ export default class Rocker extends Sprite {
   public radius: number = 55;
   public innderRadius: number = 26;
   private _touched: boolean = false;
-  private _touch: Touch;
-  private _player: Sprite;
+  private _player: IPlayer;
   public targetVec: vec2;
 
   constructor(app: GameApplication) {
@@ -37,14 +36,15 @@ export default class Rocker extends Sprite {
     this.app = app
   }
 
-  setPlayer(player: Sprite): void {
+  setPlayer(player: IPlayer): void {
     this._player = player
   }
 
   update(elapsedMesc: number, intervalSec: number) {
     if (this._touched && this._player && this.targetVec) {
-      this._player.x += this.targetVec.x * 2 / this.targetVec.length
-      this._player.y += this.targetVec.y * 2 / this.targetVec.length
+      let x = this._player.x + this.targetVec.x * 2 / this.targetVec.length
+      let y = this._player.y + this.targetVec.y * 2 / this.targetVec.length
+      this._player.setVector(x, y)
     }
   }
 
@@ -61,16 +61,13 @@ export default class Rocker extends Sprite {
 
   onTouchStart(evt: TouchEvent): void {
     this._touched = true
-    this._touch = evt.touches[0]
   }
 
   onTouchMove(evt: TouchEvent): void {
     if (!this._touched) {
       return
     }
-    const startTouch = this._touch
     const touch = evt.touches[0]
-    const { clientX: sx, clientY: sy } = startTouch
     const { clientX, clientY } = touch
     const v1: vec2 = new vec2(clientX - this.x, clientY - this.y)
     this.targetVec = v1

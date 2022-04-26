@@ -1,7 +1,7 @@
 import Sprite from '../base/sprite'
 import PLAYER_IMG_SRC from '../../images/snowsman-v2.png'
 // import PLAYER_IMG_SRC from '../../images/snowsman.png'
-import { state } from '../store/index'
+import { state } from '../store'
 
 const PLAYER_WIDTH = 30
 const PLAYER_HEIGHT = 40

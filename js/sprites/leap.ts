@@ -1,10 +1,10 @@
 import Sprite from '../base/sprite'
 // import { CanvasInputEvent } from './js/base/application'
-import ATTACK_IMG_SRC from '../../images/btn-attack.png'
+import LEAP_IMG_SRC from '../../images/btn-leap.png'
 import { CanvasMouseEvent } from '../base/application'
 import { GameApplication } from '../app'
 
-export default class Attack extends Sprite {
+export default class Leap extends Sprite {
   private app: GameApplication;
   public initWidth: number = 80;
   public initHeight: number = 80;
@@ -15,14 +15,13 @@ export default class Attack extends Sprite {
   public toUpdate: boolean = false;
 
   constructor(app: GameApplication) {
-    super(ATTACK_IMG_SRC)
+    super(LEAP_IMG_SRC)
     this.width =  this.initWidth;
     this.height = this.initHeight;
-    this.x = app.canvas.width - this.width - 40
-    this.y = app.canvas.height - this.height - 10
+    this.x = app.canvas.width - this.width - 0
+    this.y = app.canvas.height - this.height - 80
     this.initX = this.x
     this.initY = this.y
-
     this.app = app
   }
 
