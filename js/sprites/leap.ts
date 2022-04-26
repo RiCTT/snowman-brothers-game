@@ -1,9 +1,7 @@
 import Sprite from '../base/sprite'
-// import { CanvasInputEvent } from './js/base/application'
 import LEAP_IMG_SRC from '../../images/btn-leap.png'
 import { CanvasMouseEvent } from '../base/application'
 import { GameApplication } from '../app'
-import { IPlayer } from './player';
 
 export default class Leap extends Sprite {
   private app: GameApplication;

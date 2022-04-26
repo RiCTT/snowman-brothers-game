@@ -1,13 +1,6 @@
-import Sprite, { ISprite } from '../base/sprite'
+import Sprite from '../base/sprite'
 import { GameApplication } from '../app'
 import { vec2 } from '../utils/math2d';
-import { IPlayer } from '../sprites/player'
-
-export interface IRocker extends ISprite {
-  innerX: number;
-  innerY: number;
-}
-
 export default class Rocker extends Sprite implements IRocker {
   private app: GameApplication;
   public initWidth: number = 100;

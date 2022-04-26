@@ -1,13 +1,7 @@
-import Sprite, { ISprite } from '../base/sprite'
+import Sprite from '../base/sprite'
 // import { CanvasInputEvent } from './js/base/application'
 import { GameApplication } from '../app'
 import { Rectangle, vec2, Size } from '../utils/math2d';
-
-export interface IPlayer extends ISprite {
-  setVector(x: number, y: number): void
-  setSize(w: number, h: number): void
-}
-
 export default class Player extends Sprite implements IPlayer {
   private app: GameApplication;
   public x: number = 140;

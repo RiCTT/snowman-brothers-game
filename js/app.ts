@@ -1,7 +1,6 @@
 import { Canvas2DApplication, CanvasInputEvent, CanvasMouseEvent } from './base/application'
-import Sprite, { ISprite } from './base/sprite';
-import { IPlayer } from './sprites/player';
-import Rocker, { IRocker } from './sprites/rocker';
+import Sprite from './base/sprite';
+import Rocker from './sprites/rocker';
 
 export class GameApplication extends Canvas2DApplication {
   public ctx: CanvasRenderingContext2D;

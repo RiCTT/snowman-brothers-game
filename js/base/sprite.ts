@@ -1,28 +1,5 @@
 
 import { CanvasMouseEvent } from './application'
-
-export interface ISprite {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  src: string;
-  visible: boolean;
-  scaleX?: number;
-  scaleY?: number;
-  isSupportTouch: boolean;
-
-
-  draw: (ctx: CanvasRenderingContext2D) => void;
-  isInSpriteArea: (x: number, y: number) => boolean;
-  isCollideWith: (sp: Sprite) => boolean;
-  onClick?: (evt: CanvasMouseEvent) => void;
-  onTouchStart?: (evt: TouchEvent) => void;
-  onTouchMove?: (evt: TouchEvent) => void;
-  onTouchEnd?: (evt: TouchEvent) => void;
-  update?(elapsedMsec: number, intervalSec: number): void;
-}
-
 export default class Sprite implements ISprite {
   public x: number = 0;
   public y: number = 0;
