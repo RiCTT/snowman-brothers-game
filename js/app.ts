@@ -1,5 +1,7 @@
 import { Canvas2DApplication, CanvasInputEvent, CanvasMouseEvent } from './base/application'
-import { ISprite } from './base/sprite';
+import Sprite, { ISprite } from './base/sprite';
+import { IPlayer } from './sprites/player';
+import Rocker, { IRocker } from './sprites/rocker';
 
 export class GameApplication extends Canvas2DApplication {
   public ctx: CanvasRenderingContext2D;
@@ -7,6 +9,8 @@ export class GameApplication extends Canvas2DApplication {
   public cx: number = 0;
   public cy: number = 0;
   public sprites: ISprite[] = [];
+  public player: IPlayer;
+  public rocker: IRocker
 
   constructor(canvas: HTMLCanvasElement) {
     super(canvas)
@@ -29,6 +33,14 @@ export class GameApplication extends Canvas2DApplication {
       let sp: ISprite = this.sprites[i]
       sp.update && sp.update(elapsedMsec, intervalSec)
     }
+  }
+
+  public setPlayer(player: IPlayer): void {
+    this.player = player
+  }
+
+  public setRocker(rocker: IRocker): void {
+    this.rocker = rocker
   }
 
   public addSprite(sp: ISprite): void {

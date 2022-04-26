@@ -3,6 +3,7 @@ import Sprite from '../base/sprite'
 import LEAP_IMG_SRC from '../../images/btn-leap.png'
 import { CanvasMouseEvent } from '../base/application'
 import { GameApplication } from '../app'
+import { IPlayer } from './player';
 
 export default class Leap extends Sprite {
   private app: GameApplication;
@@ -12,6 +13,7 @@ export default class Leap extends Sprite {
   public initY: number = 0;
   public width: number = 80;
   public height: number = 80;
+  public leapLen: number = 30;
   public toUpdate: boolean = false;
 
   constructor(app: GameApplication) {
@@ -46,5 +48,7 @@ export default class Leap extends Sprite {
 
   onClick(evt: CanvasMouseEvent) {
     this.toUpdate = true
+    // this.app.player.setVector(this.app.player.x, this.app.player.y - this.leapLen)
+    console.log(this.app.rocker.innerX)
   }
 }

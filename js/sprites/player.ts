@@ -22,9 +22,11 @@ export default class Player extends Sprite implements IPlayer {
     super()
     this.rect = new Rectangle(new vec2(this.x, this.y), new Size(this.width, this.height))
     this.boundaryRect = new Rectangle(
-      new vec2(this.x, 0), 
+      new vec2(140, 0), 
       new Size(window.innerWidth - this.x - this.width - 80, window.innerHeight)
     )
+    this.x = app.canvas.width * 0.5 - this.width * 0.5
+    this.y = app.canvas.height * 0.5 - this.height * 0.5
     this.app = app
   }
 

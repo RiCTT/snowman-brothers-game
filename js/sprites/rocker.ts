@@ -1,9 +1,14 @@
-import Sprite from '../base/sprite'
+import Sprite, { ISprite } from '../base/sprite'
 import { GameApplication } from '../app'
 import { vec2 } from '../utils/math2d';
 import { IPlayer } from '../sprites/player'
 
-export default class Rocker extends Sprite {
+export interface IRocker extends ISprite {
+  innerX: number;
+  innerY: number;
+}
+
+export default class Rocker extends Sprite implements IRocker {
   private app: GameApplication;
   public initWidth: number = 100;
   public initHeight: number = 100;
@@ -17,7 +22,6 @@ export default class Rocker extends Sprite {
   public radius: number = 55;
   public innderRadius: number = 26;
   private _touched: boolean = false;
-  private _player: IPlayer;
   public targetVec: vec2;
 
   constructor(app: GameApplication) {
@@ -36,15 +40,11 @@ export default class Rocker extends Sprite {
     this.app = app
   }
 
-  setPlayer(player: IPlayer): void {
-    this._player = player
-  }
-
   update(elapsedMesc: number, intervalSec: number) {
-    if (this._touched && this._player && this.targetVec) {
-      let x = this._player.x + this.targetVec.x * 2 / this.targetVec.length
-      let y = this._player.y + this.targetVec.y * 2 / this.targetVec.length
-      this._player.setVector(x, y)
+    if (this._touched && this.app.player && this.targetVec) {
+      let x = this.app.player.x + this.targetVec.x * 2 / this.targetVec.length
+      let y = this.app.player.y + this.targetVec.y * 2 / this.targetVec.length
+      this.app.player.setVector(x, y)
     }
   }
 
@@ -52,6 +52,7 @@ export default class Rocker extends Sprite {
     this.app.drawCircle(this.x, this.y, this.radius, 'rgba(0, 0, 0, .5)')
     this.app.drawCircle(this.innerX, this.innerY, this.innderRadius, '#ddd')
   }
+
   isInSpriteArea(x: number, y: number): boolean {
     let x1 = x - this.x
     let y1 = y - this.y

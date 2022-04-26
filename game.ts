@@ -12,9 +12,11 @@ const rockerSp = new Rocker(app)
 const playerSp = new Player(app)
 const leapSp = new Leap(app)
 
-rockerSp.setPlayer(playerSp)
-
 app.start()
+
+app.setPlayer(playerSp)
+app.setRocker(rockerSp)
+
 app.addSprite(attackSp)
 app.addSprite(rockerSp)
 app.addSprite(playerSp)
