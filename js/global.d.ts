@@ -30,6 +30,8 @@ interface IRocker extends ISprite {
 }
 
 interface IPlayer extends ISprite {
+  boundaryRect: Rectangle;
+  
   setVector(x: number, y: number): void
   setSize(w: number, h: number): void
 }

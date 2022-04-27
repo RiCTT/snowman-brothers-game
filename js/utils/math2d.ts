@@ -261,6 +261,14 @@ export class Rectangle {
   public get bottom(): number {
     return this.origin.y + this.size.height
   }
+
+  public get width(): number {
+    return this.size.width
+  }
+
+  public get height(): number {
+    return this.size.width
+  }
 }
 
 export class Math2D {

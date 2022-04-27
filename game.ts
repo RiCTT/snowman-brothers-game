@@ -3,6 +3,7 @@ import Attack from './js/sprites/attack'
 import Rocker from './js/sprites/rocker'
 import Player from './js/sprites/player'
 import Leap from './js/sprites/leap'
+import Map from './js/sprites/map'
 
 const canvas: HTMLCanvasElement = document.querySelector('#canvas') as HTMLCanvasElement
 const app: GameApplication = new GameApplication(canvas)
@@ -21,3 +22,6 @@ app.addSprite(attackSp)
 app.addSprite(rockerSp)
 app.addSprite(playerSp)
 app.addSprite(leapSp)
+
+const mapSp = new Map(app)
+app.addSprite(mapSp)

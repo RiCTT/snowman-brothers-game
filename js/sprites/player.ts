@@ -20,7 +20,7 @@ export default class Player extends Sprite implements IPlayer {
       new Size(window.innerWidth - this.x - this.width - 80, window.innerHeight)
     )
     this.x = app.canvas.width * 0.5 - this.width * 0.5
-    this.y = app.canvas.height * 0.5 - this.height * 0.5
+    this.y = app.canvas.height - this.height
     this.app = app
   }
 
