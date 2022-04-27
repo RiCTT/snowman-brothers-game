@@ -4,6 +4,11 @@ import { CanvasMouseEvent } from '../base/application'
 import { GameApplication } from '../app'
 import { getQuadraticCurvePoint, vec2 } from '../utils/math2d';
 
+enum Direction {
+  LEFT,
+  CENTER,
+  RIGHT
+}
 export default class Leap extends Sprite {
   private app: GameApplication;
   public initWidth: number = 80;
@@ -17,6 +22,7 @@ export default class Leap extends Sprite {
   public isLeap: boolean = false;
   public t: number = 0;
   public lastStart: vec2;
+  public direction: Direction;
 
   constructor(app: GameApplication) {
     super(LEAP_IMG_SRC)
@@ -53,11 +59,13 @@ export default class Leap extends Sprite {
 
   changeLeap() {
     if (this.t < 1 && this.lastStart) {
+      console.log('direction', this.direction)
+      let direction = this.direction
       let px = this.lastStart.x
       let py = this.lastStart.y
-      let cx = px + 50
+      let cx = direction === Direction.LEFT ? px - 50 : direction === Direction.RIGHT ? px + 50 : px
       let cy = py - this.leapLen
-      let ex = px + 50
+      let ex = direction === Direction.LEFT ? px - 50 : direction === Direction.RIGHT ? px + 50 : px
       let ey = py
   
       this.app.drawPoint(px, py)
@@ -68,6 +76,7 @@ export default class Leap extends Sprite {
       
       const point = getQuadraticCurvePoint(px, py, cx, cy, ex, ey, Math.min(this.t, 1))
       this.app.player.setVector(point.x, point.y)
+
     }
 
     if (this.t >= 1) {
@@ -78,10 +87,14 @@ export default class Leap extends Sprite {
 
   onClick(evt: CanvasMouseEvent) {
     this.lastStart = new vec2(this.app.player.x, this.app.player.y)
+    const rockerPos = new vec2(this.app.rocker.innerX, this.app.rocker.innerY)
+    const rockerX = this.app.rocker.x
+    const isRight = rockerPos.x > rockerX 
+    const isLeft = rockerPos.x < rockerX
+
+    this.direction = isRight ? Direction.RIGHT : isLeft ? Direction.LEFT : Direction.CENTER
+    
     this.isLeap = true
     this.toUpdate = true
-    if (!this.app.rocker.targetVec) {
-      return
-    }
   }
 }

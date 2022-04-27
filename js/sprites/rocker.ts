@@ -31,6 +31,7 @@ export default class Rocker extends Sprite implements IRocker {
     this.innerY = y
     this.isSupportTouch = true
     this.app = app
+    // this.innerX += 50
   }
 
   update(elapsedMesc: number, intervalSec: number) {
@@ -44,6 +45,7 @@ export default class Rocker extends Sprite implements IRocker {
   draw(ctx: CanvasRenderingContext2D): void {
     this.app.drawCircle(this.x, this.y, this.radius, 'rgba(0, 0, 0, .5)')
     this.app.drawCircle(this.innerX, this.innerY, this.innderRadius, '#ddd')
+
   }
 
   isInSpriteArea(x: number, y: number): boolean {
@@ -78,7 +80,7 @@ export default class Rocker extends Sprite implements IRocker {
   onTouchEnd(evt: TouchEvent): void {
     // 如果还有手指存在的话，默认当作轮盘上的触摸
     // 空的时候，所有触摸结束
-    if (!evt.touches.length) {
+    if (!evt.touches.length && this._touched) {
       this._touched = false
       this.innerX = this.initX
       this.innerY = this.initY
