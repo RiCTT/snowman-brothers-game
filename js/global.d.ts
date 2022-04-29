@@ -12,6 +12,8 @@ interface ISprite {
   scaleX?: number;
   scaleY?: number;
   isSupportTouch: boolean;
+  velocityY: number;
+  velocityY: number;
 
 
   draw: (ctx: CanvasRenderingContext2D) => void;

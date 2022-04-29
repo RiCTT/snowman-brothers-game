@@ -11,6 +11,8 @@ export default class Sprite implements ISprite {
   public scaleY?: number = 1;
   public isSupportTouch: boolean = false;
   private img: HTMLImageElement;
+  public velocityX: number = 0;
+  public velocityY: number = 0;
 
 
   onClick(evt: CanvasMouseEvent): void { }
