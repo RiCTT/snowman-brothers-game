@@ -23,6 +23,7 @@ interface ISprite {
   onTouchStart?: (evt: TouchEvent) => void;
   onTouchMove?: (evt: TouchEvent) => void;
   onTouchEnd?: (evt: TouchEvent) => void;
+  onKeyDown?: (evt: CanvasKeyBoardEvent) => void;
   update?(elapsedMsec: number, intervalSec: number): void;
 }
 interface IRocker extends ISprite {
@@ -34,6 +35,6 @@ interface IRocker extends ISprite {
 interface IPlayer extends ISprite {
   boundaryRect: Rectangle;
   
-  setVector(x: number, y: number): void
+  setVector(x: number, y?: number): void
   setSize(w: number, h: number): void
 }

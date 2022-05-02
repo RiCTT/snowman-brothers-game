@@ -1,4 +1,4 @@
-import { Canvas2DApplication, CanvasInputEvent, CanvasMouseEvent } from './base/application'
+import { Canvas2DApplication, CanvasInputEvent, CanvasKeyBoardEvent, CanvasMouseEvent } from './base/application'
 
 export class GameApplication extends Canvas2DApplication {
   public ctx: CanvasRenderingContext2D;
@@ -8,6 +8,7 @@ export class GameApplication extends Canvas2DApplication {
   public sprites: ISprite[] = [];
   public player: IPlayer;
   public rocker: IRocker
+  public map: ISprite;
 
   constructor(canvas: HTMLCanvasElement) {
     super(canvas)
@@ -30,6 +31,10 @@ export class GameApplication extends Canvas2DApplication {
       let sp: ISprite = this.sprites[i]
       sp.update && sp.update(elapsedMsec, intervalSec)
     }
+  }
+
+  public setMap(map: Srpite): void {
+    this.map = map
   }
 
   public setPlayer(player: IPlayer): void {
@@ -82,6 +87,14 @@ export class GameApplication extends Canvas2DApplication {
         sp.onTouchEnd(evt)
       }
     })
+  }
+
+  protected dispatchKeyDown(evt: CanvasKeyBoardEvent): void {
+      this.sprites.forEach(sp => {
+        if (sp.onKeyDown) {
+          sp.onKeyDown(evt)
+        }
+      })
   }
 
   public drawCircle(x: number, y: number, radius: number, style: string = '#000', isFill: boolean = true): void {

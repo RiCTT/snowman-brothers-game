@@ -9,6 +9,7 @@ enum BlockType {
 export default class Map extends Sprite {
   private app: GameApplication;
   public mapData: number[][] = [];
+  public mapPos: Rectangle[] = [];
   public mapSize: Size;
   public size: Size;
 
@@ -38,6 +39,24 @@ export default class Map extends Sprite {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ]
     this.app = app
+    this.mapPos = []
+    this.initMapData()
+  }
+
+  initMapData() {
+    const bx = this.app.player.boundaryRect.left
+    const by = this.app.player.boundaryRect.top
+
+    this.mapData.forEach((row, rowIndex) => {
+      row.forEach((col, colIndex) => {
+        if (col === 1) {
+          let x = bx + colIndex * this.size.width
+          let y = by + rowIndex * this.size.height
+          this.mapPos.push(new Rectangle(new vec2(x, y), new Size(this.size.width, this.size.height)))
+        }
+      })
+    })
+    console.log(this.mapPos)
   }
 
   update(elapsedMesc: number, intervalSec: number) {

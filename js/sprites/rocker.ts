@@ -1,6 +1,8 @@
 import Sprite from '../base/sprite'
 import { GameApplication } from '../app'
 import { vec2 } from '../utils/math2d';
+import { CanvasInputEvent, CanvasKeyBoardEvent, CanvasMouseEvent } from '../base/application'
+
 export default class Rocker extends Sprite implements IRocker {
   private app: GameApplication;
   public initWidth: number = 100;
@@ -15,7 +17,7 @@ export default class Rocker extends Sprite implements IRocker {
   public radius: number = 55;
   public innderRadius: number = 26;
   private _touched: boolean = false;
-  public targetVec: vec2;
+  public targetVec: vec2 | null;
 
   constructor(app: GameApplication) {
     super()
@@ -31,21 +33,20 @@ export default class Rocker extends Sprite implements IRocker {
     this.innerY = y
     this.isSupportTouch = true
     this.app = app
-    // this.innerX += 50
+    // this.innerX -= 50
   }
 
   update(elapsedMesc: number, intervalSec: number) {
     if (this._touched && this.app.player && this.targetVec) {
       let x = this.app.player.x + this.targetVec.x * 2 / this.targetVec.length
-      let y = this.app.player.y + this.targetVec.y * 2 / this.targetVec.length
-      this.app.player.setVector(x, y)
+      // let y = this.app.player.y + this.targetVec.y * 2 / this.targetVec.length
+      this.app.player.setVector(x, this.app.player.y)
     }
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
     this.app.drawCircle(this.x, this.y, this.radius, 'rgba(0, 0, 0, .5)')
     this.app.drawCircle(this.innerX, this.innerY, this.innderRadius, '#ddd')
-
   }
 
   isInSpriteArea(x: number, y: number): boolean {
@@ -53,6 +54,19 @@ export default class Rocker extends Sprite implements IRocker {
     let y1 = y - this.y
     let len = Math.sqrt(x1 * x1 + y1 * y1)
     return len < this.radius
+  }
+
+  onKeyDown(evt: CanvasKeyBoardEvent): void {
+    switch(evt.key) {
+      case 'a':
+      case 'ArrowLeft':
+        this.app.player.setVector(this.app.player.x - 10)
+        break
+      case 'd':
+      case 'ArrowRight':
+        this.app.player.setVector(this.app.player.x + 10)
+        break
+    }
   }
 
   onTouchStart(evt: TouchEvent): void {
@@ -84,6 +98,7 @@ export default class Rocker extends Sprite implements IRocker {
       this._touched = false
       this.innerX = this.initX
       this.innerY = this.initY
+      this.targetVec = null
     }
   }
 

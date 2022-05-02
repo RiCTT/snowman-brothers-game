@@ -25,3 +25,4 @@ app.addSprite(leapSp)
 
 const mapSp = new Map(app)
 app.addSprite(mapSp)
+app.setMap(mapSp)

@@ -32,7 +32,7 @@ export default class Player extends Sprite implements IPlayer {
     this.app.drawLine(this.boundaryRect.right, this.boundaryRect.top, this.boundaryRect.right, this.boundaryRect.bottom, 0.5, '#f00')
   }
 
-  setVector(x: number, y: number) {
+  setVector(x: number, y?: number) {
     const { left, right, top, bottom } = this.boundaryRect
     
     if (x < left) {
@@ -41,17 +41,20 @@ export default class Player extends Sprite implements IPlayer {
     if (x > right - this.width) {
       x = right - this.width
     }
-    if (y < top) {
+    if (y && y < top) {
       y = top
     }
-    if (y > bottom - this.height) {
+    if (y && y > bottom - this.height) {
       y = bottom - this.height
     }
 
     this.x = x
-    this.y = y
     this.rect.origin.x = x
-    this.rect.origin.y = y
+
+    if (y) {
+      this.y = y
+      this.rect.origin.y = y
+    }
   }
 
   setSize(w: number, h: number) {

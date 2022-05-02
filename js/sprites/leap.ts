@@ -10,7 +10,8 @@ enum Direction {
   RIGHT
 }
 // v = gt
-const GRAVITY_FORCE = 9.8
+// const GRAVITY_FORCE = 9.81
+const GRAVITY_FORCE = 0.4
 export default class Leap extends Sprite {
   private app: GameApplication;
   public initWidth: number = 80;
@@ -21,10 +22,12 @@ export default class Leap extends Sprite {
   public height: number = 80;
   public leapLen: number = 100;
   public t: number = 0;
-  public lastStart: vec2;
+  public lastStart: vec2 | null;
   public direction: Direction;
   public isClicking: boolean = false;
   public isLeaping: boolean = false;
+  public vx: number = 2;
+  public vy: number = 2;
 
   constructor(app: GameApplication) {
     super(LEAP_IMG_SRC)
@@ -46,25 +49,54 @@ export default class Leap extends Sprite {
     if (!this.isLeaping) {
       return
     }
-    if (this.t < 1 && this.lastStart) {
-      let direction = this.direction
-      let px = this.lastStart.x
-      let py = this.lastStart.y
-      let cx = direction === Direction.LEFT ? px - 50 : direction === Direction.RIGHT ? px + 50 : px
-      let cy = py - this.leapLen
-      // let cy = py - 500
-      let ex = direction === Direction.LEFT ? px - 50 : direction === Direction.RIGHT ? px + 50 : px
-      let ey = py
-  
-      this.t += 0.1
-      
-      const point = getQuadraticCurvePoint(px, py, cx, cy, ex, ey, Math.min(this.t, 1))
-      this.app.player.setVector(point.x, point.y)
+    const direction = this.direction
+
+    if (this.app.player.y <= this.lastStart.y - 100) {
+      this.vy *= -1
     }
 
-    if (this.t >= 1) {
+    let x, y
+
+
+    switch (direction) {
+      case Direction.LEFT:
+        x = this.app.player.x - this.vx
+        y = this.app.player.y - this.vy
+        break
+      case Direction.CENTER:
+        x = this.app.player.x
+        y = this.app.player.y - this.vy
+        break
+      case Direction.RIGHT:
+        x = this.app.player.x + this.vx
+        y = this.app.player.y - this.vy
+        break
+    }
+
+    for (let i = 0; i < this.app.map.mapPos.length; i++) {
+      const rectangle = this.app.map.mapPos[i]
+      if (y <= rectangle.bottom) {
+        console.log(rectangle)
+        let playR = x + this.app.player.width
+        if ((x >= rectangle.left && x <= rectangle.right) || (playR >= rectangle.left && playR <= rectangle.right + 10)) {
+          // console.log(rectangle)
+          y = rectangle.bottom
+          this.vy = Math.abs(this.vy) * -1
+          break
+        }
+      }
+    }
+
+    this.app.player.setVector(x, y)
+
+    // this.vy += GRAVITY_FORCE
+
+
+    if (this.app.player.y >= this.lastStart.y) {
       this.isLeaping = false
-      this.t = 0
+      // this.vy = Math.abs(this.vy)
+      this.vy = 2
+      this.lastStart = null
     }
   }
 
@@ -96,7 +128,7 @@ export default class Leap extends Sprite {
     const rockerX = this.app.rocker.x
     const isRight = rockerPos.x > rockerX 
     const isLeft = rockerPos.x < rockerX
-
+    
     this.direction = isRight ? Direction.RIGHT : isLeft ? Direction.LEFT : Direction.CENTER
   }
 }
