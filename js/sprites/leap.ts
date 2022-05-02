@@ -132,3 +132,119 @@ export default class Leap extends Sprite {
     this.direction = isRight ? Direction.RIGHT : isLeft ? Direction.LEFT : Direction.CENTER
   }
 }
+
+
+
+let canvas = document.getElementById('canvas')
+let ctx = canvas.getContext('2d')
+
+const sp = {
+  x: canvas.clientWidth * 0.5,
+  y: canvas.clientHeight * 0.5,
+  vx: 1,
+  vy: 1,
+  behaviors: [],
+}
+
+function easeOutQuad(t, b, c, d) {
+  return -c * (t /= d) * (t - 2) + b;
+}
+
+function easeOutCubic(t, b, c, d) {
+  return c * ((t = t / d - 1) * t * t + 1) + b;
+}
+
+const pixelPerMeter = 13
+
+const jumpBehavior = {
+  gravityForce: 9.81,
+  // 多久时间完成这个行为
+  duration: 1000,
+  // 是否上升阶段
+  isRising: false,
+  isFalling: false,
+
+  easingFunction: null,
+  isStart: false,
+  isEnd: false,
+  endY: 0,
+  startTime: 0,
+  endTime: 0,
+  // 期待是每一帧调用一次
+  execute: function(sp, elapsedTime, intervalSec) {
+    if (!this.isStart || this.isEnd) {
+      return
+    }
+    this.startTime += (intervalSec)
+
+    if (this.startTime > this.duration) {
+      this.isStart = false
+      this.isEnd = true
+      return
+    }
+    if (this.startTime > this.duration / 2) {
+      this.isRising = false
+      this.isFalling = true
+    } else {
+      this.isRising = true
+      this.isFalling = false
+    }
+
+    if (this.isRising) {
+      let ey = easeOutQuad(this.startTime, canvas.clientHeight * 0.5, -100, 500)
+      let ex = easeOutQuad(this.startTime, canvas.clientWidth * 0.5, 30, 500)
+      sp.x = ex
+      sp.y = ey
+    } else if (this.isFalling) {
+      let ey = easeOutCubic(this.startTime - 500, window.innerHeight * 0.5 - 100, 100, 500)
+      let ex = easeOutCubic(this.startTime - 500, canvas.clientWidth * 0.5 + 30, 30, 500)
+      sp.x = ex
+      sp.y = ey
+      console.log(window.innerHeight - ey)
+    }
+
+
+  },
+  start: function() {
+    this.startTime = 0
+    this.isStart = true
+  },
+  pause: function() {
+    this.isStart = false
+  }
+}
+
+sp.behaviors.push(jumpBehavior)
+
+let lastElapsedMesc = 0
+
+const loop = (elapsedMesc = 0) => {
+  let intervalSec = elapsedMesc - lastElapsedMesc
+  lastElapsedMesc = elapsedMesc
+  sp.behaviors.forEach(be => {
+    be.execute(sp, elapsedMesc, intervalSec)
+  })
+
+  ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+
+  
+  ctx.beginPath()
+  ctx.moveTo(0, window.innerHeight * 0.5)
+  ctx.lineTo(window.innerWidth, window.innerHeight * 0.5)
+  ctx.closePath()
+  ctx.fillStyle = 'red'
+  ctx.stroke()
+
+  ctx.arc(sp.x, sp.y, 5, 0, Math.PI * 2)
+  ctx.fillStyle = 'red'
+  ctx.closePath()
+  ctx.fill()
+
+
+  window.requestAnimationFrame(loop)
+}
+
+console.log('start loop')
+loop()
+
+sp.behaviors[0].start()

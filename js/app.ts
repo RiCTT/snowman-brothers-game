@@ -18,12 +18,12 @@ export class GameApplication extends Canvas2DApplication {
   }
 
   public render(): void {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
-    for (let i: number = 0; i < this.sprites.length; i++) {
-      let sp: ISprite = this.sprites[i]
-      sp.draw(this.ctx)
-    }
+    // for (let i: number = 0; i < this.sprites.length; i++) {
+    //   let sp: ISprite = this.sprites[i]
+    //   sp.draw(this.ctx)
+    // }
   }
 
   public update(elapsedMsec: number, intervalSec: number): void {
