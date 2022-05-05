@@ -11,6 +11,12 @@ export default class Player extends Sprite implements IPlayer {
   public toUpdate: boolean = false;
   public rect: Rectangle;
   public boundaryRect: Rectangle;
+  public direction: Number;
+  public jumping: boolean = false;
+  public rising: boolean = false;
+  public falling: boolean = false;
+  public launchPos: vec2 | null;
+  public launchTime: number | undefined;
 
   constructor(app: GameApplication) {
     super()
@@ -24,7 +30,67 @@ export default class Player extends Sprite implements IPlayer {
     this.app = app
   }
 
-  update(elapsedMesc: number, intervalSec: number) {}
+  stopFalling() {
+    this.jumping = false
+    this.rising = true
+    this.falling = false
+  }
+
+  
+  getJumpHorizontalVelocity() {
+    let velocity = 0.425
+    if (this.direction === 0) {
+      return -velocity
+    } else if (this.direction === 2) {
+      return velocity
+    }
+    return 0
+  }
+  
+  doFalling(disTime) {
+    const vy = ((disTime - 500) / 500) * 100
+    let y = this.launchPos.y - 100 + vy
+    let x = this.x + this.getJumpHorizontalVelocity()
+    this.setVector(x, y)
+  }
+
+  doRising(disTime) {
+    const vy = disTime / 500 * 100
+    let y = this.launchPos.y - vy
+    let x = this.x + this.getJumpHorizontalVelocity()
+    this.setVector(x, y)
+  }
+
+  update(elapsedMesc: number, intervalSec: number) {
+    this.direction = this.app.rocker.getDirection()
+    
+    if (!this.launchTime) {
+      this.launchTime = elapsedMesc
+    }
+
+    if (this.jumping) {
+      const disTimeout = elapsedMesc - this.launchTime
+      if (disTimeout > 1000) {
+        this.stopFalling()
+      } else if (disTimeout > 500) {
+        this.doFalling(disTimeout)
+      } else {
+        this.doRising(disTimeout)
+      }
+    }
+  }
+
+  jump() {
+    if (this.jumping) {
+      return
+    }
+    this.launchPos = new vec2(this.x, this.y)
+    console.log(this.launchPos)
+    this.launchTime = 0
+    this.jumping = true
+    this.rising = true
+    this.falling = false
+  }
 
   draw(ctx: CanvasRenderingContext2D): void {
     this.app.drawRect(this.x, this.y, this.width, this.height)

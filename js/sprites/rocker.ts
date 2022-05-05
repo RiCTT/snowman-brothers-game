@@ -3,6 +3,12 @@ import { GameApplication } from '../app'
 import { vec2 } from '../utils/math2d';
 import { CanvasInputEvent, CanvasKeyBoardEvent, CanvasMouseEvent } from '../base/application'
 
+enum Direction {
+  LEFT,
+  CENTER,
+  RIGHT
+}
+
 export default class Rocker extends Sprite implements IRocker {
   private app: GameApplication;
   public initWidth: number = 100;
@@ -33,7 +39,16 @@ export default class Rocker extends Sprite implements IRocker {
     this.innerY = y
     this.isSupportTouch = true
     this.app = app
-    // this.innerX -= 50
+    this.innerX += 50
+  }
+
+  getDirection(): Direction {
+    if (this.innerX > this.x) {
+      return Direction.RIGHT
+    } else if (this.innerX < this.x) {
+      return Direction.LEFT
+    }
+    return Direction.CENTER
   }
 
   update(elapsedMesc: number, intervalSec: number) {
@@ -101,5 +116,4 @@ export default class Rocker extends Sprite implements IRocker {
       this.targetVec = null
     }
   }
-
 }

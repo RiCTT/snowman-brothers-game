@@ -38,3 +38,9 @@ interface IPlayer extends ISprite {
   setVector(x: number, y?: number): void
   setSize(w: number, h: number): void
 }
+
+interface Direction {
+  LEFT,
+  CENTER,
+  RIGHT
+}
