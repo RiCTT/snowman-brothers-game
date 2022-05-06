@@ -2,6 +2,8 @@ import Sprite from '../base/sprite'
 // import { CanvasInputEvent } from './js/base/application'
 import { GameApplication } from '../app'
 import { Rectangle, vec2, Size } from '../utils/math2d';
+// import PLAYER_SRC from '../../images/player.gif'
+import PLAYER_SRC from '../../images/player-frame.png'
 export default class Player extends Sprite implements IPlayer {
   private app: GameApplication;
   public x: number = 140;
@@ -19,7 +21,7 @@ export default class Player extends Sprite implements IPlayer {
   public launchTime: number | undefined;
 
   constructor(app: GameApplication) {
-    super()
+    super(PLAYER_SRC)
     this.rect = new Rectangle(new vec2(this.x, this.y), new Size(this.width, this.height))
     this.boundaryRect = new Rectangle(
       new vec2(140, 0), 
@@ -28,17 +30,45 @@ export default class Player extends Sprite implements IPlayer {
     this.x = app.canvas.width * 0.5 - this.width * 0.5
     this.y = app.canvas.height - this.height
     this.app = app
+    this.runCells = [
+      { x: 0, y: 0, width: 75, height: 96 },
+      { x: 79, y: 1, width: 77, height: 91 },
+      { x: 160, y: -1, width: 74, height: 93 },
+      { x: 238, y: -1, width: 74, height: 93 },
+      { x: 316, y: -1, width: 74, height: 93 },
+      { x: 401, y: -1, width: 74, height: 93 },
+      { x: 487, y: -1, width: 74, height: 93 },
+      { x: 583, y: -1, width: 74, height: 93 },
+      { x: 677, y: -1, width: 74, height: 93 },
+      { x: 766, y: -1, width: 74, height: 93 },
+      { x: 845, y: -1, width: 74, height: 93 },
+      { x: 918, y: -1, width: 74, height: 93 },
+    ]
+    this.jumpCells = [
+      { x: 0, y: 112, width: 85, height: 130 },
+      { x: 82, y: 112, width: 85, height: 130 },
+      { x: 175, y:  112, width: 85, height: 130 },
+      { x: 263, y:  112, width: 85, height: 130 },
+    ]
+    this.cells = this.runCells
+    this.cellsIndex = 0
+    this.app.addTimer(() => {
+      console.log('run')
+      this.advance()
+    }, 1000 / 24 / 1000)
   }
 
   stopFalling() {
     this.jumping = false
     this.rising = true
     this.falling = false
+    this.cells = this.runCells
+    this.cellsIndex = 0
   }
 
   
   getJumpHorizontalVelocity() {
-    let velocity = 0.425
+    let velocity = 1
     if (this.direction === 0) {
       return -velocity
     } else if (this.direction === 2) {
@@ -61,9 +91,17 @@ export default class Player extends Sprite implements IPlayer {
     this.setVector(x, y)
   }
 
+  advance() {
+    if (this.cellsIndex + 1 === this.cells.length) {
+      this.cellsIndex = 0
+    } else {
+      this.cellsIndex++
+    }
+  }
+
   update(elapsedMesc: number, intervalSec: number) {
     this.direction = this.app.rocker.getDirection()
-    
+
     if (!this.launchTime) {
       this.launchTime = elapsedMesc
     }
@@ -84,8 +122,9 @@ export default class Player extends Sprite implements IPlayer {
     if (this.jumping) {
       return
     }
+    this.cells = this.jumpCells
+    this.cellsIndex = 0
     this.launchPos = new vec2(this.x, this.y)
-    console.log(this.launchPos)
     this.launchTime = 0
     this.jumping = true
     this.rising = true
@@ -93,9 +132,12 @@ export default class Player extends Sprite implements IPlayer {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    this.app.drawRect(this.x, this.y, this.width, this.height)
-    this.app.drawLine(this.boundaryRect.left, this.boundaryRect.top, this.boundaryRect.left, this.boundaryRect.bottom, 0.5, '#f00')
-    this.app.drawLine(this.boundaryRect.right, this.boundaryRect.top, this.boundaryRect.right, this.boundaryRect.bottom, 0.5, '#f00')
+    const cell = this.cells[this.cellsIndex]
+    // ctx.drawImage(this.img, this.x, this.y, this.width, this.height, )
+    ctx.drawImage(this.img, cell.x, cell.y, cell.width, cell.height, this.x, this.y, this.width, this.height)
+    // this.app.drawRect(this.x, this.y, this.width, this.height)
+    this.app.drawLine(this.boundaryRect.left, this.boundaryRect.top, this.boundaryRect.left, this.boundaryRect.bottom, 0.5, '#ddd')
+    this.app.drawLine(this.boundaryRect.right, this.boundaryRect.top, this.boundaryRect.right, this.boundaryRect.bottom, 0.5, '#ddd')
   }
 
   setVector(x: number, y?: number) {
