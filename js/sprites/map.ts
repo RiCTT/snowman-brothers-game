@@ -19,6 +19,9 @@ export default class Map extends Sprite {
     let h = app.player.boundaryRect.height
     this.mapSize = new Size(w, h)
     this.size = new Size(w / 10, h / 20)
+    console.log(this.size)
+    console.log(this.size.width)
+    console.log(this.size.height)
     this.mapData = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

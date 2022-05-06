@@ -13,8 +13,10 @@ export class GameApplication extends Canvas2DApplication {
   constructor(canvas: HTMLCanvasElement) {
     super(canvas)
     this.ctx = this.context2D as CanvasRenderingContext2D
-    this.canvas.width = window.innerWidth
-    this.canvas.height = window.innerHeight
+    // this.canvas.width = window.innerWidth
+    // this.canvas.height = window.innerHeight
+    this.canvas.width = 667
+    this.canvas.height = 375
   }
 
   public render(): void {

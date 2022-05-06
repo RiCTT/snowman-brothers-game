@@ -39,7 +39,7 @@ export default class Rocker extends Sprite implements IRocker {
     this.innerY = y
     this.isSupportTouch = true
     this.app = app
-    this.innerX += 50
+    // this.innerX += 50
   }
 
   getDirection(): Direction {

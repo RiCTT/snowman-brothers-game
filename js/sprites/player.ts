@@ -25,7 +25,8 @@ export default class Player extends Sprite implements IPlayer {
     this.rect = new Rectangle(new vec2(this.x, this.y), new Size(this.width, this.height))
     this.boundaryRect = new Rectangle(
       new vec2(140, 0), 
-      new Size(window.innerWidth - this.x - this.width - 80, window.innerHeight)
+      // new Size(window.innerWidth - this.x - this.width - 80, window.innerHeight)
+      new Size(app.canvas.width - this.x - this.width - 80, app.canvas.height)
     )
     this.x = app.canvas.width * 0.5 - this.width * 0.5
     this.y = app.canvas.height - this.height
@@ -78,14 +79,14 @@ export default class Player extends Sprite implements IPlayer {
   }
   
   doFalling(disTime) {
-    const vy = ((disTime - 500) / 500) * 100
-    let y = this.launchPos.y - 100 + vy
+    const vy = ((disTime - 500) / 500) * 60
+    let y = this.launchPos.y - 60 + vy
     let x = this.x + this.getJumpHorizontalVelocity()
     this.setVector(x, y)
   }
 
   doRising(disTime) {
-    const vy = disTime / 500 * 100
+    const vy = disTime / 500 * 60
     let y = this.launchPos.y - vy
     let x = this.x + this.getJumpHorizontalVelocity()
     this.setVector(x, y)
