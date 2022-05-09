@@ -11,6 +11,10 @@
 
       定义一个终点，一个0-1的缓动系数。每次速度 = 当前坐标 - 终点坐标 * 系统，随着距离越小，速度越慢。整体表现为：速度由快到慢，趋于0
 
+  ### 适配问题
+    - 1、canvas不全屏的情况下，需要对touch，click的坐标进行转换处理
+    - 2、精灵的大小要适配
+
 ## 参考资料
   - [碰撞检测](https://cloud.tencent.com/developer/article/1483707?from=15425)
   - [弹性碰撞](https://baijiahao.baidu.com/s?id=1675105209720015473&wfr=spider&for=pc)

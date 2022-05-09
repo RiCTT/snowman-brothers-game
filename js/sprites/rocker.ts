@@ -81,6 +81,17 @@ export default class Rocker extends Sprite implements IRocker {
       case 'ArrowRight':
         this.app.player.setVector(this.app.player.x + 10)
         break
+      case 's':
+      case 'ArrowDown':
+        this.app.player.setVector(this.app.player.x, this.app.player.y + 10)
+        break
+      case 'w':
+      case 'ArrowUp':
+        this.app.player.setVector(this.app.player.x, this.app.player.y - 10)
+        break
+      case ' ':
+        this.app.player.jump()
+        break
     }
   }
 

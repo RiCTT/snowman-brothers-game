@@ -1,15 +1,42 @@
 import Sprite from '../base/sprite'
 import { GameApplication } from '../app'
-import { Rectangle, Size, vec2 } from '../utils/math2d';
+import { Size } from '../utils/math2d';
 
-enum BlockType {
+class BlockItem extends Sprite {
+  constructor(x: number, y: number, width: number, height: number) {
+    super()
+    this.x = x
+    this.y = y
+    this.width = width
+    this.height = height
+    this.right = this.x + this.width
+    this.bottom = this.y + this.height
+  }
 
+  drawCircle(ctx) {
+    ctx.save()
+    ctx.beginPath()
+    ctx.strokeStyle = 'red'
+    ctx.arc(this.x, this.y, 5, 0, Math.PI * 2)
+    ctx.stroke()
+    ctx.restore()
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    ctx.save()
+    ctx.beginPath()
+    ctx.fillStyle = '#000'
+    ctx.moveTo(this.x, this.y)
+    ctx.rect(this.x, this.y, this.width, this.height)
+    ctx.fill()
+    ctx.restore()
+  }
 }
 
 export default class Map extends Sprite {
   private app: GameApplication;
   public mapData: number[][] = [];
-  public mapPos: Rectangle[] = [];
+  public mapPos: Sprite[] = [];
   public mapSize: Size;
   public size: Size;
 
@@ -18,28 +45,37 @@ export default class Map extends Sprite {
     let w = app.player.boundaryRect.width
     let h = app.player.boundaryRect.height
     this.mapSize = new Size(w, h)
-    this.size = new Size(w / 10, h / 20)
-    console.log(this.size)
-    console.log(this.size.width)
-    console.log(this.size.height)
+    this.size = new Size(Math.floor(w / 8), Math.floor(h / 23))
     this.mapData = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [1, 1, 0, 1, 0, 1, 1, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [1, 1, 0, 1, 0, 1, 1, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [1, 1, 0, 1, 0, 1, 1, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [1, 1, 0, 1, 0, 1, 1, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 1, 1, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 1, 1, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 1, 1, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 1, 1, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ]
     this.app = app
     this.mapPos = []
@@ -55,7 +91,8 @@ export default class Map extends Sprite {
         if (col === 1) {
           let x = bx + colIndex * this.size.width
           let y = by + rowIndex * this.size.height
-          this.mapPos.push(new Rectangle(new vec2(x, y), new Size(this.size.width, this.size.height)))
+          let item = new BlockItem(x, y, this.size.width, this.size.height)
+          this.mapPos.push(item)
         }
       })
     })
@@ -66,24 +103,8 @@ export default class Map extends Sprite {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    const bx = this.app.player.boundaryRect.left
-    const by = this.app.player.boundaryRect.top
-    
-    this.mapData.forEach((row, rowIndex) => {
-      row.forEach((col, colIndex) => {
-        if (col === 1) {
-          let x = colIndex * this.size.width
-          let y = rowIndex * this.size.height
-          ctx.save()
-          ctx.translate(bx, by)
-          ctx.beginPath()
-          ctx.fillStyle = '#000'
-          ctx.moveTo(x, y)
-          ctx.rect(x, y, this.size.width, this.size.height)
-          ctx.fill()
-          ctx.restore()
-        }
-      })
+    this.mapPos.forEach(sp => {
+      sp.draw(ctx)
     })
   }
 }

@@ -11,6 +11,8 @@ interface ISprite {
   y: number;
   width: number;
   height: number;
+  right: number;
+  bottom: number;
   src: string;
   visible: boolean;
   scaleX?: number;

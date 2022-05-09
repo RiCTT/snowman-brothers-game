@@ -19,6 +19,10 @@ export default class Player extends Sprite implements IPlayer {
   public falling: boolean = false;
   public launchPos: vec2 | null;
   public launchTime: number | undefined;
+  public collideSprite: Sprite | null;
+  public jumpHeight: number = 60;
+  public defaultJumpHeight: number = 60;
+  public currentPlatform: Srpite | null;
 
   constructor(app: GameApplication) {
     super(PLAYER_SRC)
@@ -30,7 +34,11 @@ export default class Player extends Sprite implements IPlayer {
     )
     this.x = app.canvas.width * 0.5 - this.width * 0.5
     this.y = app.canvas.height - this.height
+    this.right = this.x + this.width
+    this.bottom = this.y + this.height
     this.app = app
+    console.log(this.width)
+    console.log(this.height)
     this.runCells = [
       { x: 0, y: 0, width: 75, height: 96 },
       { x: 79, y: 1, width: 77, height: 91 },
@@ -53,20 +61,20 @@ export default class Player extends Sprite implements IPlayer {
     ]
     this.cells = this.runCells
     this.cellsIndex = 0
+
     this.app.addTimer(() => {
-      console.log('run')
       this.advance()
     }, 1000 / 24 / 1000)
   }
 
   stopFalling() {
     this.jumping = false
-    this.rising = true
+    this.rising = false
     this.falling = false
     this.cells = this.runCells
     this.cellsIndex = 0
+    this.jumpHeight = this.defaultJumpHeight
   }
-
   
   getJumpHorizontalVelocity() {
     let velocity = 1
@@ -77,19 +85,70 @@ export default class Player extends Sprite implements IPlayer {
     }
     return 0
   }
+
+  isCollideWithPlatform(x = this.x, y = this.y): Sprite | null {
+    for(let i = 0; i < this.app.map.mapPos.length; i++) {
+      const pos = this.app.map.mapPos[i]
+      if (this.isCollideWith(pos)) {
+        return pos
+      }
+    }
+    return null
+  }
+
+  calculateFinalVertical(x, y): number {
+    let result = this.isCollideWithPlatform(x, y)
+    let height = this.app.canvas.height
+    if (result) {
+      height = result.y
+    }
+
+    height = height - this.height
+
+    return height
+  }
   
   doFalling(disTime) {
-    const vy = ((disTime - 500) / 500) * 60
-    let y = this.launchPos.y - 60 + vy
+    if (disTime < 500) {
+      disTime = 500
+    }
+    const vy = ((disTime - 500) / 500) * Math.abs(this.jumpHeight)
     let x = this.x + this.getJumpHorizontalVelocity()
+    let y = this.launchPos.y - this.jumpHeight + vy
+    const shouldAtVerticalValue = this.calculateFinalVertical(x, y)
+    const result = this.isCollideWithPlatform(x, y)
+    if (result) {
+      console.log(result)
+      this.currentPlatform = result
+      this.falling = false
+      this.rising = false
+      y = result.y - this.height
+    } else if (y < shouldAtVerticalValue) {
+      y--
+    } else {
+      this.falling = false
+      this.rising = false
+    }
     this.setVector(x, y)
   }
 
   doRising(disTime) {
-    const vy = disTime / 500 * 60
-    let y = this.launchPos.y - vy
+    const vy = disTime / 500 * this.jumpHeight
     let x = this.x + this.getJumpHorizontalVelocity()
+    let y = this.launchPos.y - vy
+    const result = this.isCollideWithPlatform(x, y)
+    if (result) {
+      this.currentPlatform = result
+      y = result.bottom + vy
+      this.rising = false
+      this.falling = true
+      this.jumpHeight = this.launchPos.y - y
+    }
     this.setVector(x, y)
+    if (disTime >= 500) {
+      this.rising = false
+      this.falling = true
+    }
   }
 
   advance() {
@@ -109,12 +168,12 @@ export default class Player extends Sprite implements IPlayer {
 
     if (this.jumping) {
       const disTimeout = elapsedMesc - this.launchTime
-      if (disTimeout > 1000) {
+      if (!this.rising && !this.falling) {
         this.stopFalling()
-      } else if (disTimeout > 500) {
-        this.doFalling(disTimeout)
-      } else {
+      } else if (this.rising) {
         this.doRising(disTimeout)
+      } else if (this.falling) {
+        this.doFalling(disTimeout)
       }
     }
   }
@@ -126,6 +185,7 @@ export default class Player extends Sprite implements IPlayer {
     this.cells = this.jumpCells
     this.cellsIndex = 0
     this.launchPos = new vec2(this.x, this.y)
+    this.jumpHeight = this.defaultJumpHeight
     this.launchTime = 0
     this.jumping = true
     this.rising = true
@@ -134,9 +194,8 @@ export default class Player extends Sprite implements IPlayer {
 
   draw(ctx: CanvasRenderingContext2D): void {
     const cell = this.cells[this.cellsIndex]
-    // ctx.drawImage(this.img, this.x, this.y, this.width, this.height, )
     ctx.drawImage(this.img, cell.x, cell.y, cell.width, cell.height, this.x, this.y, this.width, this.height)
-    // this.app.drawRect(this.x, this.y, this.width, this.height)
+    this.app.drawRect(this.x, this.y, this.width, this.height, '#000', false)
     this.app.drawLine(this.boundaryRect.left, this.boundaryRect.top, this.boundaryRect.left, this.boundaryRect.bottom, 0.5, '#ddd')
     this.app.drawLine(this.boundaryRect.right, this.boundaryRect.top, this.boundaryRect.right, this.boundaryRect.bottom, 0.5, '#ddd')
   }
@@ -158,11 +217,12 @@ export default class Player extends Sprite implements IPlayer {
     }
 
     this.x = x
-    this.rect.origin.x = x
+    // 不知道干嘛用的
+    // this.rect.origin.x = x
 
     if (y) {
       this.y = y
-      this.rect.origin.y = y
+      // this.rect.origin.y = y
     }
   }
 

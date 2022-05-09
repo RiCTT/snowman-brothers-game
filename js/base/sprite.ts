@@ -5,8 +5,10 @@ export default class Sprite implements ISprite {
   public y: number = 0;
   public width: number = 0;
   public height: number = 0;
+  public right: number = 0;
+  public bottom: number = 0;
   public src: string = '';
-  public visible: boolean = false;
+  public visible: boolean = true;
   public scaleX?: number = 1;
   public scaleY?: number = 1;
   public isSupportTouch: boolean = false;
@@ -42,19 +44,36 @@ export default class Sprite implements ISprite {
 
   /**
    * 简单的碰撞检测定义：
-   * 另一个精灵的中心点处于本精灵所在的矩形内即可
+   * 另一个精灵的四个点是否与精灵所在的矩形发生碰撞
    * @param{Sprite} sp: Sptite的实例
    */
   isCollideWith(sp: Sprite) {
-    const spX = sp.x + sp.width / 2
-    const spY = sp.y + sp.height / 2
 
     if (!this.visible || !sp.visible) return false
 
-    return !!(spX >= this.x
-      && spX <= this.x + this.width
-      && spY >= this.y
-      && spY <= this.y + this.height)
+    // return Math.abs(sp.x - this.x) < sp.width / 2 + this.width / 2
+    //   && Math.abs(sp.y - this.y) < sp.height / 2 + this.height / 2
+
+    // return !!(spX >= this.x
+    //   && spX <= this.x + this.width
+    //   && spY >= this.y
+    //   && spY <= this.y + this.height)
+
+    // return this.x >= sp.x
+    //   && this.x <= sp.right
+    //   && this.y >= sp.y
+    //   && this.y <= sp.bottom
+    const right = this.x + this.width
+    const bottom = this.y + this.height
+    const spRight = sp.x + sp.width
+    const spBottom = sp.y + sp.height
+
+    const leftTopCollide = this.x > sp.x && this.x < spRight && this.y > sp.y && this.y < spBottom
+    const rightTopCollide = right > sp.x && right < spRight && this.y > sp.y && this.y < spBottom
+    const leftBottomCollide = this.x > sp.x && this.x < spRight && bottom > sp.y && bottom < spBottom
+    const rightBottomCollide = right > sp.x && right < spRight && bottom > sp.y && bottom < spBottom
+
+    return leftTopCollide || rightTopCollide || leftBottomCollide || rightBottomCollide
   }
 
   /**

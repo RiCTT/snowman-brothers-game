@@ -24,5 +24,6 @@ app.addSprite(playerSp)
 app.addSprite(leapSp)
 
 const mapSp = new Map(app)
-app.addSprite(mapSp)
+
+app.addSprite(mapSp, 0)
 app.setMap(mapSp)

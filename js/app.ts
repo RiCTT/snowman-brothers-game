@@ -24,7 +24,9 @@ export class GameApplication extends Canvas2DApplication {
 
     for (let i: number = 0; i < this.sprites.length; i++) {
       let sp: ISprite = this.sprites[i]
-      sp.draw(this.ctx)
+      if (sp.visible) {
+        sp.draw(this.ctx)
+      }
     }
   }
 
@@ -47,8 +49,17 @@ export class GameApplication extends Canvas2DApplication {
     this.rocker = rocker
   }
 
-  public addSprite(sp: ISprite): void {
-    this.sprites.push(sp)
+  /**
+   * 
+   * @param sp 
+   * @param index 插入的顺序，渲染顺序
+   */
+  public addSprite(sp: ISprite, index?: number): void {
+    if (index >= 0) {
+      this.sprites.splice(index, 0, sp)
+    } else {
+      this.sprites.push(sp)
+    }
   }
 
   // 只有落在精灵的范围内，才允许分发点击事件
