@@ -10,6 +10,7 @@ export default class Player extends Sprite implements IPlayer {
   public y: number = 20;
   public width: number = 50;
   public height: number = 50;
+  // public height: number = 10;
   public toUpdate: boolean = false;
   public rect: Rectangle;
   public boundaryRect: Rectangle;
@@ -34,6 +35,8 @@ export default class Player extends Sprite implements IPlayer {
     )
     this.x = app.canvas.width * 0.5 - this.width * 0.5
     this.y = app.canvas.height - this.height
+    // this.x = app.canvas.width * 0.5 + this.width * 2
+    // this.y = 0
     this.right = this.x + this.width
     this.bottom = this.y + this.height
     this.app = app
@@ -89,7 +92,7 @@ export default class Player extends Sprite implements IPlayer {
   isCollideWithPlatform(x = this.x, y = this.y): Sprite | null {
     for(let i = 0; i < this.app.map.mapPos.length; i++) {
       const pos = this.app.map.mapPos[i]
-      if (this.isCollideWith(pos)) {
+      if (this.isCollideWith(pos)) { 
         return pos
       }
     }
@@ -107,7 +110,7 @@ export default class Player extends Sprite implements IPlayer {
 
     return height
   }
-  
+
   doFalling(disTime) {
     if (disTime < 500) {
       disTime = 500
@@ -118,11 +121,19 @@ export default class Player extends Sprite implements IPlayer {
     const shouldAtVerticalValue = this.calculateFinalVertical(x, y)
     const result = this.isCollideWithPlatform(x, y)
     if (result) {
-      console.log(result)
-      this.currentPlatform = result
+      let collideType = this.collideType
+      console.log(collideType)
+      if (collideType === 5) {
+        x = result.x + result.width
+      } else if (collideType === 6) {
+        x = result.x - this.width
+      } else if (collideType === 7 || collideType === 1 || collideType === 2) {
+        y = result.bottom + 1
+      } else if (collideType === 8 || collideType === 3 || collideType === 4) {
+        y = result.y - this.height - 1
+      }
       this.falling = false
       this.rising = false
-      y = result.y - this.height
     } else if (y < shouldAtVerticalValue) {
       y--
     } else {
@@ -137,18 +148,32 @@ export default class Player extends Sprite implements IPlayer {
     let x = this.x + this.getJumpHorizontalVelocity()
     let y = this.launchPos.y - vy
     const result = this.isCollideWithPlatform(x, y)
+    const collideType = this.collideType
     if (result) {
-      this.currentPlatform = result
-      y = result.bottom + vy
+      if (collideType === 7 || collideType === 1 || collideType === 2) {
+        // 顶部碰到
+        y = result.bottom + vy
+      } else if (collideType === 8 || collideType === 3 || collideType === 4) {
+        y = result.y - this.height
+        // 底部碰到
+      } else if (collideType === 5) {
+        x = result.x + result.width
+        // 左侧碰到
+      } else if (collideType === 6) {
+        x = result.x
+        // 右侧碰到
+      }
+      // y = result.bottom + vy
       this.rising = false
       this.falling = true
       this.jumpHeight = this.launchPos.y - y
     }
-    this.setVector(x, y)
     if (disTime >= 500) {
       this.rising = false
       this.falling = true
     }
+
+    this.setVector(x, y)
   }
 
   advance() {
@@ -160,6 +185,8 @@ export default class Player extends Sprite implements IPlayer {
   }
 
   update(elapsedMesc: number, intervalSec: number) {
+    // console.log(this.x)
+    // console.log(this.y)
     this.direction = this.app.rocker.getDirection()
 
     if (!this.launchTime) {

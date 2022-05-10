@@ -20,6 +20,8 @@ interface ISprite {
   isSupportTouch: boolean;
   velocityY: number;
   velocityY: number;
+  collideType: number | null;
+  collideSprite: Sprite | null;
 
 
   draw: (ctx: CanvasRenderingContext2D) => void;

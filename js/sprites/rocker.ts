@@ -39,7 +39,7 @@ export default class Rocker extends Sprite implements IRocker {
     this.innerY = y
     this.isSupportTouch = true
     this.app = app
-    // this.innerX += 50
+    this.innerX += 50
   }
 
   getDirection(): Direction {
@@ -72,22 +72,23 @@ export default class Rocker extends Sprite implements IRocker {
   }
 
   onKeyDown(evt: CanvasKeyBoardEvent): void {
+    const velocity = 2
     switch(evt.key) {
       case 'a':
       case 'ArrowLeft':
-        this.app.player.setVector(this.app.player.x - 10)
+        this.app.player.setVector(this.app.player.x - velocity)
         break
       case 'd':
       case 'ArrowRight':
-        this.app.player.setVector(this.app.player.x + 10)
+        this.app.player.setVector(this.app.player.x + velocity)
         break
       case 's':
       case 'ArrowDown':
-        this.app.player.setVector(this.app.player.x, this.app.player.y + 10)
+        this.app.player.setVector(this.app.player.x, this.app.player.y + velocity)
         break
       case 'w':
       case 'ArrowUp':
-        this.app.player.setVector(this.app.player.x, this.app.player.y - 10)
+        this.app.player.setVector(this.app.player.x, this.app.player.y - velocity)
         break
       case ' ':
         this.app.player.jump()
